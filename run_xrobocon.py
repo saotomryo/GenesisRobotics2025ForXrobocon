@@ -2,25 +2,24 @@ import genesis as gs
 import torch
 import numpy as np
 import os
-from xrobocon.field import XRoboconField
 from xrobocon.robot import XRoboconRobot
+from xrobocon.field import XRoboconField
+from xrobocon.game import XRoboconGame
 
 class XRoboconSimulator:
     """XROBOCON シミュレーター"""
     
     def __init__(self):
-        gs.init(backend=gs.gpu, precision='32')
+        gs.init(backend=gs.gpu)
         
         self.scene = gs.Scene(
             viewer_options=gs.options.ViewerOptions(
                 camera_pos=(3.0, -3.0, 2.5),
                 camera_lookat=(0.0, 0.0, 0.5),
                 camera_fov=40,
-                res=(800, 600),
-                max_FPS=60,
             ),
             rigid_options=gs.options.RigidOptions(
-                dt=0.005,
+                dt=0.01,
                 gravity=(0.0, 0.0, -9.8),
             ),
             show_viewer=True,
@@ -39,27 +38,40 @@ class XRoboconSimulator:
         # ロボットをその手前 (1.5, -2.0) に配置。向きはY軸正方向 (90度)。
         self.robot = XRoboconRobot(self.scene, pos=(1.5, -2.0, 0.1), euler=(0, 0, 90))
         
+        # ゲームロジック初期化
+        self.game = XRoboconGame(self.field, self.robot)
+        
+        # コインスポット可視化
+        self.spot_entities = self.field.add_coin_spots(self.scene, self.game.spots)
+        
         self.scene.build()
         self.robot.post_build()
+        
+        # ゲーム開始
+        self.game.start()
         
     def run(self):
         """シミュレーション実行"""
         print("Simulation started. Press Ctrl+C to exit.")
         
+        # シミュレーションループ
         step = 0
         try:
             while True:
+                # ゲーム更新
+                self.game.update(0.01) # dt=0.01
+                
+                # 定期的に情報を表示
+                if step % 100 == 0: # 1秒ごと
+                    info = self.game.get_info()
+                    print(f"Time: {info['time']:.1f}s, Score: {info['score']}, Collected: {info['collected_count']}/{info['total_spots']}")
+                
                 # Ramp 1 は Y軸正方向に登る。
                 # すでにY軸正方向を向いているので、直進するだけ。
                 self.robot.set_wheel_torques(20.0, 20.0)
                 
                 self.scene.step()
                 step += 1
-                
-                if step % 100 == 0:
-                    pos = self.robot.get_pos()
-                    vel = self.robot.get_vel()
-                    print(f"Step {step}: Pos=({pos[0]:.2f}, {pos[1]:.2f}, {pos[2]:.2f}), Vel={vel}")
                 
         except KeyboardInterrupt:
             print("Simulation stopped.")

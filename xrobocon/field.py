@@ -56,7 +56,7 @@ class XRoboconField:
         #    End(Top): (0.5*cos240, 0.5*sin240, 0.6). Tangent Dir: 330 deg.
         
         ramp_width = 0.8
-        ramp_thickness = 0.5 # 厚めにして埋める
+        ramp_thickness = 0.1 # 厚みを減らして見た目を改善 (0.5 -> 0.1)
         
         def create_ramp(scene, name, start_h, end_h, target_r, target_angle_deg, length):
             # 目標地点 (円周上の接点)
@@ -118,3 +118,34 @@ class XRoboconField:
         entities.append(create_ramp(scene, "ramp3", 0.35, 0.6, 0.5, 240, 1.0))
             
         return entities
+
+    def add_coin_spots(self, scene, spots):
+        """コインスポットを可視化する"""
+        spot_entities = []
+        for spot in spots:
+            # コインスポット: 薄い円柱 (マーカー)
+            # 色: 未獲得=黄色, 獲得済み=灰色 (動的に変えるのは難しいので、とりあえず黄色)
+            # Tierによって色を変える？
+            color = (1.0, 1.0, 0.0) # Yellow
+            if spot['tier'] == 3:
+                color = (1.0, 0.5, 0.0) # Orange
+            elif spot['tier'] == 2:
+                color = (1.0, 1.0, 0.0) # Yellow
+            else:
+                color = (0.8, 0.8, 0.0) # Dark Yellow
+                
+            entity = scene.add_entity(
+                gs.morphs.Cylinder(
+                    pos=spot['pos'],
+                    height=0.01, # 薄い
+                    radius=0.15, # 判定半径より少し小さく
+                    fixed=True,
+                    collision=False, # 衝突判定なし (通り抜け可能)
+                ),
+                material=gs.materials.Rigid(), # 材質は適当
+                surface=gs.surfaces.Default(
+                    color=color,
+                )
+            )
+            spot_entities.append(entity)
+        return spot_entities
