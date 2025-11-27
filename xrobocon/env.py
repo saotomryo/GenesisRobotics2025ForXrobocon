@@ -79,24 +79,34 @@ class XRoboconEnv(gym.Env):
             'slope_full',       # 地面からTier 1まで
         ])
         
-        if scenario_type == 'slope_mid':
-            # スロープの途中から開始（最も簡単）
-            # Ramp 1の中間地点
-            start_pos = (1.3, -0.3, 0.03)
-            start_euler = (0, 0, 90)  # Y軸正方向を向く
-            target_pos = (1.5, 0.0, 0.1)  # Tier 1の端
-            
-        elif scenario_type == 'slope_bottom':
-            # スロープの下から（中程度）
-            start_pos = (1.2, -0.5, 0.0)
-            start_euler = (0, 0, 90)
-            target_pos = (1.5, 0.0, 0.1)
-            
-        elif scenario_type == 'slope_full':
-            # 地面からTier 1まで（最も難しい）
-            start_pos = (1.0, -1.0, 0.0)
-            start_euler = (0, 0, 90)
-            target_pos = (1.5, 0.5, 0.1)  # Tier 1の中央
+        scenarios = [
+        {
+            'name': 'Scenario 1: スロープ途中から (簡単)',
+            'type': 'slope_mid',
+            'start_pos': (1.5, -0.75, 0.05),
+            'start_euler': (0, 0, 90),
+            'target_pos': (1.5, 0.0, 0.1),
+        },
+        {
+            'name': 'Scenario 2: スロープ下から (中程度)',
+            'type': 'slope_bottom',
+            'start_pos': (1.5, -1.3, 0.0),
+            'start_euler': (0, 0, 90),
+            'target_pos': (1.5, 0.0, 0.1),
+        },
+        {
+            'name': 'Scenario 3: 地面からTier 1まで (難しい)',
+            'type': 'slope_full',
+            'start_pos': (1.5, -1.8, 0.0),
+            'start_euler': (0, 0, 90),
+            'target_pos': (1.5, 0.0, 0.1),
+        },
+    ]
+        
+        selected_scenario = next(s for s in scenarios if s['type'] == scenario_type)
+        start_pos = selected_scenario['start_pos']
+        start_euler = selected_scenario['start_euler']
+        target_pos = selected_scenario['target_pos']
             
         # ランダム性を少し加える（±5cm、±5度）
         # スロープは難しいので、ランダム性を減らす

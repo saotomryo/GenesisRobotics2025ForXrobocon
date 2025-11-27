@@ -90,21 +90,21 @@ def main():
     scenarios = [
         {
             'name': 'Scenario 1: スロープ途中から (簡単)',
-            'start_pos': (1.3, -0.3, 0.03),
+            'start_pos': (1.5, -0.75, 0.05),
             'start_euler': (0, 0, 90),
             'target_pos': (1.5, 0.0, 0.1),
         },
         {
             'name': 'Scenario 2: スロープ下から (中程度)',
-            'start_pos': (1.2, -0.5, 0.0),
+            'start_pos': (1.5, -1.3, 0.0),
             'start_euler': (0, 0, 90),
             'target_pos': (1.5, 0.0, 0.1),
         },
         {
             'name': 'Scenario 3: 地面からTier 1まで (難しい)',
-            'start_pos': (1.0, -1.0, 0.0),
+            'start_pos': (1.5, -1.8, 0.0),
             'start_euler': (0, 0, 90),
-            'target_pos': (1.5, 0.5, 0.1),
+            'target_pos': (1.5, 0.0, 0.1),
         },
     ]
     
