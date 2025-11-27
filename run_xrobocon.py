@@ -36,7 +36,8 @@ class XRoboconSimulator:
         # Ramp 1: End at (1.5, 0). Length 1.5. Direction Y+ (90 deg).
         # Start at (1.5, -1.5).
         # ロボットをその手前 (1.5, -2.0) に配置。向きはY軸正方向 (90度)。
-        self.robot = XRoboconRobot(self.scene, pos=(1.5, -2.0, 0.1), euler=(0, 0, 90))
+        # ロボットサイズを50%に縮小したため、Z位置も調整（0.1 → 0.05）
+        self.robot = XRoboconRobot(self.scene, pos=(1.5, -2.0, 0.05), euler=(0, 0, 90))
         
         # ゲームロジック初期化
         self.game = XRoboconGame(self.field, self.robot)
