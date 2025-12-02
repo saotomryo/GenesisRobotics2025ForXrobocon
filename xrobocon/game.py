@@ -29,40 +29,40 @@ class XRoboconGame:
         self.spots = []
         spot_id = 0
         
-        # 下段 (Tier 1): 8個
-        # R=1.25 (1.0 ~ 1.5の中間)
+        # 下段 (Tier 3 - Bottom): 8個 (Red)
+        # R=4.0m (Tier 3 R=4.65m の内側)
         for i in range(8):
             angle = np.radians(i * (360/8))
             self.spots.append({
                 'id': spot_id,
-                'pos': (1.25 * np.cos(angle), 1.25 * np.sin(angle), 0.105), # Zは床+微小高さ
-                'tier': 1,
+                'pos': (4.0 * np.cos(angle), 4.0 * np.sin(angle), 0.105), # Z=0.1 + margin
+                'tier': 3, # Bottom
                 'collected': False,
                 'stay_timer': 0.0
             })
             spot_id += 1
             
-        # 中段 (Tier 2): 8個
-        # R=0.75 (0.5 ~ 1.0の中間)
+        # 中段 (Tier 2 - Middle): 8個 (Blue)
+        # R=2.55m (Tier 2 R=3.25m の内側)
         for i in range(8):
             angle = np.radians(i * (360/8) + 22.5) # 位相をずらす
             self.spots.append({
                 'id': spot_id,
-                'pos': (0.75 * np.cos(angle), 0.75 * np.sin(angle), 0.355),
-                'tier': 2,
+                'pos': (2.55 * np.cos(angle), 2.55 * np.sin(angle), 0.355), # Z=0.35 + margin
+                'tier': 2, # Middle
                 'collected': False,
                 'stay_timer': 0.0
             })
             spot_id += 1
             
-        # 上段 (Tier 3): 4個
-        # R=0.25 (0 ~ 0.5の中間)
+        # 上段 (Tier 1 - Top): 4個 (Yellow)
+        # R=1.0m (Tier 1 R=1.85m の内側)
         for i in range(4):
             angle = np.radians(i * (360/4))
             self.spots.append({
                 'id': spot_id,
-                'pos': (0.25 * np.cos(angle), 0.25 * np.sin(angle), 0.605),
-                'tier': 3,
+                'pos': (1.0 * np.cos(angle), 1.0 * np.sin(angle), 0.605), # Z=0.6 + margin
+                'tier': 1, # Top
                 'collected': False,
                 'stay_timer': 0.0
             })

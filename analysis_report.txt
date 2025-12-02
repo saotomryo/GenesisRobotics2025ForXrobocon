@@ -1,0 +1,50 @@
+
+--- Episode 1 ---
+Start Pos: [ 7.9931145  -0.04255486  0.25      ]
+Target: (9.0, 0.0, 0.0)
+
+--- Episode 2 ---
+Start Pos: [8.0035973e+00 3.7103253e-03 2.5000000e-01]
+Target: (9.0, 0.0, 0.0)
+
+--- Episode 3 ---
+Start Pos: [ 8.002163   -0.04915998  0.25      ]
+Target: (10.0, 1.0, 0.0)
+
+============================================================
+📊 Analysis Report
+============================================================
+Total Steps Analyzed: 417
+Average Reward per Step: -0.2814
+Average Speed: 1.0644 m/s
+Average Distance Delta (Progress): 0.004345 m/step
+
+--- Action Statistics ---
+       action_frame_l  action_frame_r  action_wheel_l  action_wheel_r
+count      417.000000      417.000000      417.000000      417.000000
+mean         0.130375       -0.510479        0.003407        0.027478
+std          0.421499        0.334294        0.596794        0.629202
+min         -1.000000       -1.000000       -1.000000       -1.000000
+25%         -0.085556       -0.739618       -0.338029       -0.433740
+50%          0.203399       -0.497074       -0.033093        0.065194
+75%          0.300581       -0.354882        0.227499        0.324709
+max          1.000000        0.510573        1.000000        1.000000
+
+--- Correlation with Reward ---
+reward            1.000000
+dist_delta        0.152978
+pitch             0.072597
+speed             0.068456
+action_wheel_l   -0.017370
+yaw              -0.023842
+episode          -0.025764
+action_wheel_r   -0.026437
+dist             -0.071844
+action_frame_r   -0.077611
+action_frame_l   -0.083123
+step             -0.097235
+roll             -0.169979
+Name: reward, dtype: float64
+
+--- Diagnosis ---
+✅  Robot is moving towards the target on average.

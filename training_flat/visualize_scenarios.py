@@ -2,6 +2,7 @@
 訓練シナリオの可視化スクリプト
 各シナリオでのロボット開始位置とターゲット位置を視覚的に確認
 """
+import xrobocon.common as common
 import genesis as gs
 import numpy as np
 import time
@@ -23,8 +24,7 @@ def visualize_scenario(scenario_name, start_pos, start_euler, target_pos):
     print(f"  目標距離: {dist:.2f}m")
     print(f"{'='*70}\n")
     
-    # Genesis初期化
-    gs.init(backend=gs.gpu)
+    # Genesis初期化はmainで行うため削除
     
     scene = gs.Scene(
         viewer_options=gs.options.ViewerOptions(
@@ -47,7 +47,7 @@ def visualize_scenario(scenario_name, start_pos, start_euler, target_pos):
     field.build(scene)
     
     # ロボット（開始位置）
-    robot = XRoboconRobot(scene, pos=start_pos, euler=start_euler)
+    robot = XRoboconRobot(scene, pos=start_pos, euler=start_euler, robot_type='tristar')
     
     # ゲームロジック
     game = XRoboconGame(field, robot)
@@ -87,24 +87,27 @@ def main():
     print("\n各シナリオを10秒ずつ表示します。")
     print("ウィンドウを閉じると次のシナリオに進みます。\n")
     
+    # Genesis初期化 (共通モジュールを使用)
+    common.setup_genesis()
+    
     scenarios = [
         {
-            'name': 'Scenario 1: スロープ途中から (簡単)',
-            'start_pos': (1.5, -0.75, 0.05),
-            'start_euler': (0, 0, 90),
-            'target_pos': (1.5, 0.0, 0.1),
+            'name': 'Scenario 1: 近距離移動 (平地)',
+            'start_pos': (8.0, 0.0, 0.0),
+            'start_euler': (0, 0, 0),
+            'target_pos': (9.0, 0.0, 0.0),
         },
         {
-            'name': 'Scenario 2: スロープ下から (中程度)',
-            'start_pos': (1.5, -1.3, 0.0),
-            'start_euler': (0, 0, 90),
-            'target_pos': (1.5, 0.0, 0.1),
+            'name': 'Scenario 2: 中距離移動 (平地)',
+            'start_pos': (8.0, 0.0, 0.0),
+            'start_euler': (0, 0, 0),
+            'target_pos': (10.0, 1.0, 0.0),
         },
         {
-            'name': 'Scenario 3: 地面からTier 1まで (難しい)',
-            'start_pos': (1.5, -1.8, 0.0),
+            'name': 'Scenario 3: 長距離移動 (平地)',
+            'start_pos': (8.0, 0.0, 0.0),
             'start_euler': (0, 0, 90),
-            'target_pos': (1.5, 0.0, 0.1),
+            'target_pos': (8.0, 3.0, 0.0),
         },
     ]
     

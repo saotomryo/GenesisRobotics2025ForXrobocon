@@ -54,23 +54,33 @@ python run_xrobocon.py
 
 ### 2. 強化学習の訓練
 
-#### 短時間テスト（1000ステップ）
+#### 基本的な訓練（Tri-starロボット）
+メモリリーク対策済みの`train_loop.py`を使用することを推奨します。
+
 ```bash
-export PYTORCH_ENABLE_MPS_FALLBACK=1  # Mac使用時
-python train_rl.py --train --steps 1000
+# 平地移動訓練（10万ステップ）
+python train_loop.py --steps 100000 --chunk 10000
 ```
 
-#### 本格的な訓練（10万ステップ）
+#### 段差登坂訓練（転移学習）
+平地移動モデルをベースに段差登坂を学習します。
+
 ```bash
-export PYTORCH_ENABLE_MPS_FALLBACK=1  # Mac使用時
-python train_rl.py --train --steps 100000
+python train_rl_step.py --steps 100000 --base_model xrobocon_ppo_tristar_flat.zip
 ```
 
 ### 3. 訓練済みモデルのテスト
 
 ```bash
-export PYTORCH_ENABLE_MPS_FALLBACK=1  # Mac使用時
-python train_rl.py --test
+# 訓練済みモデルの可視化
+python visualize_trained_model.py
+```
+
+### 4. シナリオの確認
+
+```bash
+# 訓練シナリオの可視化
+python visualize_scenarios.py
 ```
 
 ## プロジェクト構造
@@ -79,14 +89,19 @@ python train_rl.py --test
 GenesisRobotics/
 ├── xrobocon/              # XROBOCONシミュレーターパッケージ
 │   ├── __init__.py
+│   ├── common.py          # 共通設定（MPS設定、Genesis初期化など）
 │   ├── field.py           # 3段フィールドの生成
-│   ├── robot.py           # ロボットクラス（2輪駆動）
+│   ├── robot.py           # ロボットクラス（2輪駆動/Tri-star）
 │   ├── game.py            # ゲームロジック（スコア、コイン獲得）
 │   ├── env.py             # Gym環境ラッパー（RL用）
 │   └── assets/
-│       └── robot.xml      # ロボットのMJCFモデル
+│       ├── robot.xml      # 標準ロボット（2輪）
+│       └── robot_tristar.xml # Tri-starロボット
 ├── run_xrobocon.py        # シミュレーション実行スクリプト
-├── train_rl.py            # RL訓練スクリプト
+├── train_loop.py          # メモリ安全な訓練ループスクリプト
+├── train_rl_step.py       # 段差登坂訓練スクリプト
+├── visualize_scenarios.py # シナリオ可視化スクリプト
+├── visualize_trained_model.py # モデル評価・可視化スクリプト
 ├── requirements.txt       # 依存パッケージ
 └── README.md              # このファイル
 ```
@@ -95,17 +110,23 @@ GenesisRobotics/
 
 ### フィールド構造
 
-- **Tier 1（下段）**: 半径1.5m、高さ0.1m、8コインスポット（各1点）
-- **Tier 2（中段）**: 半径1.0m、高さ0.25m、8コインスポット（各2点）
-- **Tier 3（上段）**: 半径0.5m、高さ0.25m、4コインスポット（各5点、2秒滞在必要）
-- **スロープ**: 各段を接続する3本のスロープ
+- **Tier 1（下段）**: 半径1.85m、高さ0.6m
+- **Tier 2（中段）**: 半径3.25m、高さ0.35m
+- **Tier 3（上段）**: 半径4.65m、高さ0.1m
+- **スロープ**: なし（段差登坂課題に変更）
 
 ### ロボット仕様
 
+#### Tri-star Robot (New)
+- **駆動方式**: Tri-starホイール機構（8モーター）
+- **制御**: ハイブリッド制御
+  - 平地: 独立ホイール駆動
+  - 段差: フレーム回転駆動
+- **自由度**: 14 DOF
+
+#### Standard Robot (Legacy)
 - **駆動方式**: 2輪差動駆動
-- **センサー**: 位置、速度、姿勢（オイラー角）
-- **制御**: トルク制御（左右独立）
-- **自由度**: 8 DOF（フリージョイント6 + ホイール2）
+- **自由度**: 8 DOF
 
 ### 強化学習環境
 
@@ -116,25 +137,20 @@ GenesisRobotics/
 - 角速度 (wx, wy, wz): 3次元
 - ターゲットベクトル (dx, dy, dz): 3次元
 
-#### 行動空間（2次元）
-- 左ホイールトルク: [-1.0, 1.0]
-- 右ホイールトルク: [-1.0, 1.0]
+#### 行動空間（2次元/8次元）
+- Standard: 左右ホイールトルク (2次元)
+- Tri-star: 左右フレームトルク + 6ホイールトルク (8次元)
 
 #### 報酬関数
-- **ターゲット接近**: 距離が縮まると正の報酬（×20.0）
-- **ターゲット到達**: 0.3m以内で+50.0
-- **安定性**: Roll/Pitchが小さいほど良い（ペナルティ×0.01）
-- **転倒**: Roll/Pitch > 60度で-100.0（終了）
-- **落下**: Z < 0で-100.0（終了）
+- **ターゲット接近**: 距離が縮まると正の報酬
+- **ターゲット到達**: 0.3m以内で大きな報酬
+- **安定性**: 姿勢安定化への報酬
+- **転倒/落下**: ペナルティとエピソード終了
 
 ### 訓練シナリオ
 
-エピソードごとに以下の4パターンからランダムに選択:
-
-1. **Start → Ramp 1**: スタート地点から最初のスロープへ
-2. **Ramp 1 → Coin**: スロープ頂上から近くのコインへ
-3. **Coin → Coin**: コイン間の移動（Tier 1内）
-4. **Coin → Ramp 2**: コインから次のスロープへ
+- **平地移動**: 指定距離・方向への移動
+- **段差登坂**: Tier間の段差乗り越え
 
 ## 技術スタック
 

@@ -1,105 +1,52 @@
-import gymnasium as gym
-from gymnasium import spaces
 import numpy as np
-import genesis as gs
-from xrobocon.field import XRoboconField
-from xrobocon.robot import XRoboconRobot
-from xrobocon.game import XRoboconGame
+from xrobocon.base_env import XRoboconBaseEnv
 
-class XRoboconEnv(gym.Env):
-    """XROBOCON RL Environment"""
+class XRoboconEnv(XRoboconBaseEnv):
+    """
+    XROBOCON RL Environment (Flat Ground)
+    平地移動訓練用の環境です。
+    """
     
-    def __init__(self, render_mode=None):
-        super().__init__()
-        
-        self.render_mode = render_mode
-        self.visualize = render_mode == "human"
-        
-        # Genesis初期化
-        gs.init(backend=gs.gpu)
-        
-        self.scene = gs.Scene(
-            viewer_options=gs.options.ViewerOptions(
-                camera_pos=(3.0, -3.0, 2.5),
-                camera_lookat=(0.0, 0.0, 0.5),
-                camera_fov=40,
-            ),
-            rigid_options=gs.options.RigidOptions(
-                dt=0.01,
-                gravity=(0.0, 0.0, -9.8),
-            ),
-            show_viewer=self.visualize,
-        )
-        
-        # 地面
-        self.plane = self.scene.add_entity(gs.morphs.Plane())
-        
-        # フィールド
-        self.field = XRoboconField()
-        self.field.build(self.scene)
-        
-        # ロボット (初期位置はresetで設定) - フィールドから離れた訓練エリア
-        self.robot = XRoboconRobot(self.scene, pos=(5.0, -1.0, 0.0), euler=(0, 0, 90))
-        
-        # ゲームロジック
-        self.game = XRoboconGame(self.field, self.robot)
-        self.field.add_coin_spots(self.scene, self.game.spots)
-        
-        self.scene.build()
-        self.robot.post_build()
-        
-        # Action Space: 左右ホイールのトルク (-1.0 ~ 1.0) -> 最大トルクにスケーリング
-        self.max_torque = 20.0
-        self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=np.float32)
-        
-        # Observation Space:
-        # - Robot Pos (3)
-        # - Robot Euler (3)
-        # - Robot Lin Vel (3)
-        # - Robot Ang Vel (3)
-        # - Target Vector (3) - 最も近い未獲得コインへのベクトル
-        # Total: 15
-        self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(15,), dtype=np.float32)
-        
-        self.current_target = None
+    def __init__(self, render_mode=None, robot_type='tristar'):
+        super().__init__(render_mode, robot_type)
         
     def reset(self, seed=None, options=None):
-        super().reset(seed=seed)
+        # 親クラスのreset呼び出し（seed設定など）
+        # super().reset(seed=seed) # BaseEnvのresetはNotImplementedErrorなので呼ばない
+        if seed is not None:
+            np.random.seed(seed)
         
         # シナリオ選択
-        # Phase 2: スロープ登坂訓練
-        # 段階的な難易度:
-        # 1. スロープ途中から（簡単）
-        # 2. スロープ下から（中程度）
-        # 3. 地面からTier 1まで（難しい）
+        # Phase 3-2a: 平地移動訓練 (Tri-star Robot)
+        # 地面（Tier 3の外側）での移動制御を学習
         
-        scenario_type = np.random.choice([
-            'slope_mid',        # スロープ途中から
-            'slope_bottom',     # スロープ下から
-            'slope_full',       # 地面からTier 1まで
-        ])
+        # シナリオ選択 (Curriculum: Short 80%, Medium 10%, Long 10%)
+        scenario_type = np.random.choice(
+            ['flat_short', 'flat_medium', 'flat_long'],
+            p=[0.8, 0.1, 0.1]
+        )
         
         scenarios = [
         {
-            'name': 'Scenario 1: スロープ途中から (簡単)',
-            'type': 'slope_mid',
-            'start_pos': (1.5, -0.75, 0.05),
-            'start_euler': (0, 0, 90),
-            'target_pos': (1.5, 0.0, 0.1),
+            'name': 'Scenario 1: 近距離移動 (平地)',
+            'type': 'flat_short',
+            'start_pos': (8.0, 0.0, 0.08),
+            'start_euler': (0, 0, 0),
+            'target_pos': (9.0, 0.0, 0.08), # 1m先
         },
         {
-            'name': 'Scenario 2: スロープ下から (中程度)',
-            'type': 'slope_bottom',
-            'start_pos': (1.5, -1.3, 0.0),
-            'start_euler': (0, 0, 90),
-            'target_pos': (1.5, 0.0, 0.1),
+            'name': 'Scenario 2: 中距離移動 (平地)',
+            'type': 'flat_medium',
+            'start_pos': (8.0, 0.0, 0.08),
+            'start_euler': (0, 0, 0),
+            'target_pos': (10.0, 1.0, 0.08), # 2m以上先、斜め
         },
         {
-            'name': 'Scenario 3: 地面からTier 1まで (難しい)',
-            'type': 'slope_full',
-            'start_pos': (1.5, -1.8, 0.0),
-            'start_euler': (0, 0, 90),
-            'target_pos': (1.5, 0.0, 0.1),
+            'name': 'Scenario 3: 長距離移動 (平地)',
+            'type': 'flat_long',
+            'start_pos': (8.0, 0.0, 0.08),
+            'start_euler': (0, 0, 90),     # 横向き
+            'target_pos': (8.0, 3.0, 0.08), # 3m先
         },
     ]
         
@@ -109,11 +56,14 @@ class XRoboconEnv(gym.Env):
         target_pos = selected_scenario['target_pos']
             
         # ランダム性を少し加える（±5cm、±5度）
-        # スロープは難しいので、ランダム性を減らす
         start_x = start_pos[0] + np.random.uniform(-0.05, 0.05)
         start_y = start_pos[1] + np.random.uniform(-0.05, 0.05)
         start_yaw = start_euler[2] + np.random.uniform(-5, 5)
         
+        # シーンリセット (物理状態のクリア)
+        self.scene.reset()
+        
+        # ロボットの位置設定 (シーンリセット後に適用)
         self.robot.set_pose(
             pos=(start_x, start_y, start_pos[2]),
             euler_deg=(0, 0, start_yaw)
@@ -122,13 +72,11 @@ class XRoboconEnv(gym.Env):
         # ゲームリセット
         self.game.start()
         
-        # ターゲット設定
+        # ターゲット設定 (ロボットの現在位置に基づいてprev_distを計算するため、set_poseの後に行う)
         self.set_target(target_pos)
         
         # 高さトラッキング用（報酬計算に使用）
         self.prev_height = start_pos[2]
-        
-        self.scene.reset()
         
         return self._get_obs(), {}
         
@@ -136,24 +84,9 @@ class XRoboconEnv(gym.Env):
         """(廃止予定) ランダムなターゲットを設定"""
         pass
 
-    def set_target(self, target_pos):
-        """外部からターゲットを指定"""
-        self.current_target = {'pos': target_pos, 'tier': 0}
-        
-        robot_pos = self.robot.get_pos().cpu().numpy()
-        self.prev_dist = np.linalg.norm(robot_pos[:2] - np.array(target_pos)[:2])
-        
     def step(self, action):
-        # Action適用
-        left_torque = action[0] * self.max_torque
-        right_torque = action[1] * self.max_torque
-        self.robot.set_wheel_torques(left_torque, right_torque)
-        
-        # 物理ステップ
-        self.scene.step()
-        
-        # ゲーム更新
-        self.game.update(0.01)
+        # 共通のアクション適用
+        self._apply_action(action)
         
         # 報酬計算
         reward = 0.0
@@ -163,6 +96,8 @@ class XRoboconEnv(gym.Env):
         # 状態取得
         robot_pos = self.robot.get_pos().cpu().numpy()
         euler = self.robot.get_euler() # numpy array
+        vel = self.robot.get_vel().cpu().numpy()
+        speed = np.linalg.norm(vel)
         
         # 1. ターゲットへの接近報酬 (Goal-Conditioned)
         if self.current_target:
@@ -170,33 +105,42 @@ class XRoboconEnv(gym.Env):
             dist = np.linalg.norm(robot_pos[:2] - target_pos[:2])
             
             # 距離が縮まったらプラス、離れたらマイナス (Shaping)
-            # 重みを20.0→50.0に増加して、接近の重要性を強調
-            reward += (self.prev_dist - dist) * 50.0
+            # 重みをさらに強化 (50.0 -> 100.0) して、移動を最優先に
+            reward += (self.prev_dist - dist) * 100.0
             self.prev_dist = dist
             
-            # 高さ報酬を追加（スロープ登坂を促進）
-            height_gain = robot_pos[2] - self.prev_height
-            reward += height_gain * 100.0  # 高さ1m登ると+100報酬
-            self.prev_height = robot_pos[2]
-            
-            # ターゲット到達判定 (距離0.35m以内かつ高さが近い)
-            # ロボット半径0.1mを考慮して、0.35mに設定
+            # ターゲット到達判定 (距離0.5m以内 - 判定を緩和)
             z_diff = abs(robot_pos[2] - target_pos[2])
-            if dist < 0.35 and z_diff < 0.2:
-                reward += 200.0 # 到達ボーナス（50.0→200.0に増加）
-                terminated = True  # 到達したらエピソード終了（成功として記録）
-                # 学習中は到達したら次のターゲットへ (Curriculum)
-                # またはエピソード終了にするか？ -> 継続して別のターゲットへ向かわせる方が効率的
-                # self.game._collect_spot(self.current_target) # 強制獲得扱い
-                # self._set_random_target() # 次のターゲット
+            if dist < 0.5 and z_diff < 0.2:
+                # 到達ボーナス
+                reward += 300.0
+                
+                # 停止ボーナス (速度が小さいほど高得点)
+                if speed < 0.1:
+                    reward += 100.0
+                elif speed < 0.5:
+                    reward += 50.0
+                
+                terminated = True
             
-        # 2. 安定性報酬 (転倒防止) - スロープ用に強化
-        # Roll/Pitchが0に近いほど良い
-        # スロープでは傾きやすいので、ペナルティを5倍に強化
+        # 2. 安定性報酬 (転倒防止)
         stability_penalty = abs(euler[0]) * 0.05 + abs(euler[1]) * 0.05
         reward -= stability_penalty
         
-        # 3. 転倒・落下判定 (終了条件)
+        # 3. 効率化のための追加ペナルティ
+        # (a) フレーム使用ペナルティ (平地ではフレームをあまり使わないでほしい)
+        # action[0], action[1] はフレームトルク
+        # 重みを0.1 -> 0.5に強化して、フレームによる「這いずり移動」を抑制
+        if self.robot_type == 'tristar':
+            frame_penalty = (abs(action[0]) + abs(action[1])) * 0.5
+            reward -= frame_penalty
+            
+        # (b) 速度超過ペナルティ (制御不能な暴走を防ぐ: 1.5m/s以上はペナルティ)
+        # 重みを1.0 -> 2.0に強化
+        if speed > 1.5:
+            reward -= (speed - 1.5) * 2.0
+        
+        # 4. 転倒・落下判定 (終了条件)
         if abs(euler[0]) > 60 or abs(euler[1]) > 60:
             reward -= 100.0
             terminated = True
@@ -210,22 +154,3 @@ class XRoboconEnv(gym.Env):
             truncated = True
             
         return self._get_obs(), reward, terminated, truncated, {}
-        
-    def _get_obs(self):
-        pos = self.robot.get_pos().cpu().numpy()
-        euler = self.robot.get_euler() # numpy array
-        vel = self.robot.get_vel().cpu().numpy()
-        ang_vel = self.robot.get_ang_vel().cpu().numpy()
-        
-        # ターゲットベクトル (相対位置)
-        target_vec = np.zeros(3)
-        if self.current_target:
-            target_pos = np.array(self.current_target['pos'])
-            target_vec = target_pos - pos
-            
-        obs = np.concatenate([pos, euler, vel, ang_vel, target_vec])
-        return obs.astype(np.float32)
-        
-    def _update_target(self):
-        # 古いメソッドは廃止 (Goal-Conditionedでは勝手にターゲットを変えない)
-        pass

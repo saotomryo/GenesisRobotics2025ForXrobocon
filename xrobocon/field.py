@@ -9,19 +9,63 @@ class XRoboconField:
         # 下段: φ3000mm, 高さ100mm
         # 中段: φ2000mm, 高さ250mm (下段からの相対高さ150mm)
         # 上段: φ1000mm, 高さ250mm (中段からの相対高さ0mm? いや、合計600mmなので...)
-        # ルール確認:
-        # 下段: φ3000mm, 高さ100mm
-        # 中段: φ2000mm, 高さ250mm (合計350mm)
-        # 上段: φ1000mm, 高さ250mm (合計600mm)
+        # フィールドの定義 (3段構成) - 画像に基づく寸法修正
+        # Tier 1 (Center): 3700mm -> R=1.85m
+        # Tier 2 (Middle): 6500mm -> R=3.25m
+        # Tier 3 (Outer):  9300mm -> R=4.65m
+        # Fence: 13750mm -> R=6.875m
+        
+        # 地面からの高さ関係を整理
+        # Ground (Z=0)
+        # Tier 3 Surface: Z=0.1 (仮) -> ここでは相対的な高さとして定義
+        # 修正: GenesisのBoxは中心座標指定なので、積み上げ方式で配置
+        
+        # 実際の配置ロジック (下から順に)
+        # Base (Tier 3の下): R=4.65, H=0.1
+        # Mid (Tier 2の下): R=3.25, H=0.25 (Tier 3 + 0.25)
+        # Top (Tier 1): R=1.85, H=0.1 (Tier 2 + 0.1)
+        
+        # シンプルにするため、円柱を重ねる
+        # Cylinder 1 (Tier 3): R=4.65, H=0.1, Pos Z=0.05
+        # Cylinder 2 (Tier 2): R=3.25, H=0.35, Pos Z=0.175
+        # Cylinder 3 (Tier 1): R=1.85, H=0.45, Pos Z=0.225
+        
+        # いや、既存のコードはBoxを使っているようなので、それに合わせるか確認
+        # 既存コードは create_tier 関数を使っているはず
+        
+        # 既存のロジックに合わせてパラメータを調整
+        # heightは「厚み」ではなく「地面からの高さ」を意図している？
+        # 確認: create_tierの実装を見ると...
+        # gs.morphs.Cylinder(height=tier['height']...)
+        # なので、heightは円柱の高さ（厚み）。
+        
+        # Tier 1 (Top): 高さ10cm (0.1m)
+        # Tier 2 (Mid): 高さ25cm (0.25m) + Tier 1? いや、段差が重要
+        # 画像の段差高さが不明だが、Tier 1が100mmなら、他もそう仮定するか、
+        # 以前の設定 (Tier 2=25cm, Tier 3=25cm) を維持するか。
+        # とりあえず半径を修正。
+        
+        # 注: 既存の実装がどうなっているか不明確なので、単純に半径だけ変える
+        
+        # これだと構造が変わってしまう。既存の値をベースに半径だけ変える。
+
+        # フィールドの定義 (3段構成) - 画像に基づく寸法修正
+        # Tier 1 (Center): 3700mm -> R=1.85m
+        # Tier 2 (Middle): 6500mm -> R=3.25m
+        # Tier 3 (Outer):  9300mm -> R=4.65m
+        
+        # 高さ設定 (積み上げ)
+        # Tier 3 (Base):   高さ 100mm (0.1m) -> Z=0.05 (中心)
+        # Tier 2 (Middle): 高さ 350mm (0.35m) -> Z=0.175 (中心)
+        # Tier 1 (Top):    高さ 600mm (0.6m) -> Z=0.3 (中心)
         
         self.tiers = [
-            # 半径, 高さ(厚み), 中心Z座標 (床0基準)
-            # 下段 (床から100mm) -> 中心Z = 0.05
-            {'radius': 1.5, 'height': 0.1, 'z': 0.05, 'color': (0.8, 0.8, 0.8)},
-            # 中段 (下段の上100mmから+250mm = 350mm) -> 中心Z = 0.1 + 0.125 = 0.225
-            {'radius': 1.0, 'height': 0.25, 'z': 0.225, 'color': (0.6, 0.6, 1.0)},
-            # 上段 (中段の上350mmから+250mm = 600mm) -> 中心Z = 0.35 + 0.125 = 0.475
-            {'radius': 0.5, 'height': 0.25, 'z': 0.475, 'color': (1.0, 0.6, 0.6)},
+            # Tier 1 (一番上)
+            {'radius': 1.85, 'height': 0.6, 'z': 0.3, 'color': (0.9, 0.9, 0.9)},
+            # Tier 2 (真ん中)
+            {'radius': 3.25, 'height': 0.35, 'z': 0.175, 'color': (0.6, 0.6, 1.0)}, # 青
+            # Tier 3 (一番下)
+            {'radius': 4.65, 'height': 0.1, 'z': 0.05, 'color': (1.0, 0.6, 0.6)},   # 赤
         ]
 
     def build(self, scene):
@@ -44,78 +88,67 @@ class XRoboconField:
             entities.append(entity)
             print(f"Tier {i+1} created: Radius={tier['radius']}m, Height={tier['height']}m, Z={tier['z']}m")
             
-        # スロープの追加 (螺旋状・接線方向・ソリッド風)
-        # 戦略:
-        # BoxはX軸方向を長手(Length)とする: size=(Length, Width, Thickness)
-        # 配置:
-        # 1. Ramp 1: Ground -> Tier 1 (R=1.5). 接点角度 0度.
-        #    End(Top): (1.5, 0, 0.1). Tangent Dir: 90 deg (Y+).
-        # 2. Ramp 2: Tier 1 -> Tier 2 (R=1.0). 接点角度 120度.
-        #    End(Top): (1.0*cos120, 1.0*sin120, 0.35). Tangent Dir: 210 deg.
-        # 3. Ramp 3: Tier 2 -> Tier 3 (R=0.5). 接点角度 240度.
-        #    End(Top): (0.5*cos240, 0.5*sin240, 0.6). Tangent Dir: 330 deg.
-        
-        ramp_width = 0.8
-        ramp_thickness = 0.1 # 厚みを減らして見た目を改善 (0.5 -> 0.1)
-        
-        def create_ramp(scene, name, start_h, end_h, target_r, target_angle_deg, length):
-            # 目標地点 (円周上の接点)
-            rad = np.radians(target_angle_deg)
-            end_x = target_r * np.cos(rad)
-            end_y = target_r * np.sin(rad)
+        # スロープの追加 (保留 - 難易度が高すぎるため撤去)
+        # ramp_width = 0.8
+        # ramp_thickness = 0.1
+        # def create_ramp(scene, name, start_h, end_h, target_r, target_angle_deg, length):
+        #     # 目標地点 (円周上の接点)
+        #     rad = np.radians(target_angle_deg)
+        #     end_x = target_r * np.cos(rad)
+        #     end_y = target_r * np.sin(rad)
             
-            # 接線方向 (反時計回りなら +90度)
-            tangent_deg = target_angle_deg + 90
-            tangent_rad = np.radians(tangent_deg)
-            dir_x = np.cos(tangent_rad)
-            dir_y = np.sin(tangent_rad)
+        #     # 接線方向 (反時計回りなら +90度)
+        #     tangent_deg = target_angle_deg + 90
+        #     tangent_rad = np.radians(tangent_deg)
+        #     dir_x = np.cos(tangent_rad)
+        #     dir_y = np.sin(tangent_rad)
             
-            # 傾斜角
-            dh = end_h - start_h
-            slope_rad = np.arcsin(dh / length)
-            slope_deg = np.degrees(slope_rad)
+        #     # 傾斜角
+        #     dh = end_h - start_h
+        #     slope_rad = np.arcsin(dh / length)
+        #     slope_deg = np.degrees(slope_rad)
             
-            # 中心位置 (XY)
-            # Endから接線方向逆向きに Length/2 戻る
-            center_x = end_x - (dir_x * length / 2)
-            center_y = end_y - (dir_y * length / 2)
+        #     # 中心位置 (XY)
+        #     # Endから接線方向逆向きに Length/2 戻る
+        #     center_x = end_x - (dir_x * length / 2)
+        #     center_y = end_y - (dir_y * length / 2)
             
-            # 中心位置 (Z)
-            # Z_pos = (H_top + H_bottom)/2 - (Thickness/2)*cos(slope)
-            center_z = (start_h + end_h) / 2 - (ramp_thickness / 2) * np.cos(slope_rad)
+        #     # 中心位置 (Z)
+        #     # Z_pos = (H_top + H_bottom)/2 - (Thickness/2)*cos(slope)
+        #     center_z = (start_h + end_h) / 2 - (ramp_thickness / 2) * np.cos(slope_rad)
             
-            # Euler角 (Genesis: XYZ順と仮定)
-            # 1. Y軸回転でSlopeをつける (X軸正方向を持ち上げるには -回転)
-            #    Right-hand rule around Y: Z -> X. Positive rot moves X to -Z (down).
-            #    So to move X up (Z+), we need Negative Y rotation.
-            #    euler_y = -slope_deg
-            # 2. Z軸回転で向きを合わせる
-            #    euler_z = tangent_deg
+        #     # Euler角 (Genesis: XYZ順と仮定)
+        #     # 1. Y軸回転でSlopeをつける (X軸正方向を持ち上げるには -回転)
+        #     #    Right-hand rule around Y: Z -> X. Positive rot moves X to -Z (down).
+        #     #    So to move X up (Z+), we need Negative Y rotation.
+        #     #    euler_y = -slope_deg
+        #     # 2. Z軸回転で向きを合わせる
+        #     #    euler_z = tangent_deg
             
-            # Box作成 (X軸長手)
-            ramp = scene.add_entity(
-                gs.morphs.Box(
-                    pos=(center_x, center_y, center_z),
-                    size=(length, ramp_width, ramp_thickness),
-                    euler=(0, -slope_deg, tangent_deg),
-                    fixed=True,
-                ),
-                material=gs.materials.Rigid(friction=1.0)
-            )
-            return ramp
+        #     # Box作成 (X軸長手)
+        #     ramp = scene.add_entity(
+        #         gs.morphs.Box(
+        #             pos=(center_x, center_y, center_z),
+        #             size=(length, ramp_width, ramp_thickness),
+        #             euler=(0, -slope_deg, tangent_deg),
+        #             fixed=True,
+        #         ),
+        #         material=gs.materials.Rigid(friction=1.0)
+        #     )
+        #     return ramp
 
-        # Ramp 1: Ground(0.0) -> Tier 1(0.1). Target R=1.5, Angle=0.
-        # Length=1.5 (勾配緩やか)
-        entities.append(create_ramp(scene, "ramp1", 0.0, 0.1, 1.5, 0, 1.5))
+        # # Ramp 1: Ground(0.0) -> Tier 1(0.1). Target R=1.5, Angle=0.
+        # # Length=1.5 (勾配緩やか)
+        # entities.append(create_ramp(scene, "ramp1", 0.0, 0.1, 1.5, 0, 1.5))
         
-        # Ramp 2: Tier 1(0.1) -> Tier 2(0.35). Target R=1.0, Angle=120.
-        # Length=1.0 (短くしてTier 1内に収める)
-        # Start R approx 1.41 < 1.5
-        entities.append(create_ramp(scene, "ramp2", 0.1, 0.35, 1.0, 120, 1.0))
+        # # Ramp 2: Tier 1(0.1) -> Tier 2(0.35). Target R=1.0, Angle=120.
+        # # Length=1.0 (短くしてTier 1内に収める)
+        # # Start R approx 1.41 < 1.5
+        # entities.append(create_ramp(scene, "ramp2", 0.1, 0.35, 1.0, 120, 1.0))
         
-        # Ramp 3: Tier 2(0.35) -> Tier 3(0.6). Target R=0.5, Angle=240.
-        # Length=1.0 (短くしてTier 2内に収める)
-        entities.append(create_ramp(scene, "ramp3", 0.35, 0.6, 0.5, 240, 1.0))
+        # # Ramp 3: Tier 2(0.35) -> Tier 3(0.6). Target R=0.5, Angle=240.
+        # # Length=1.0 (短くしてTier 2内に収める)
+        # entities.append(create_ramp(scene, "ramp3", 0.35, 0.6, 0.5, 240, 1.0))
             
         return entities
 
@@ -149,3 +182,38 @@ class XRoboconField:
             )
             spot_entities.append(entity)
         return spot_entities
+    def get_terrain_height(self, x, y):
+        """
+        指定された座標(x, y)の地形高さを返す
+        
+        Args:
+            x (float): X座標
+            y (float): Y座標
+            
+        Returns:
+            float: 地形の高さ (Z座標)
+        """
+        # 中心からの距離
+        r = np.sqrt(x**2 + y**2)
+        
+        # Tier判定 (内側から順に)
+        # Tier 1: R <= 1.85, H=0.6 (Z=0.3中心 -> 上面は0.6)
+        # Tier 2: R <= 3.25, H=0.35 (Z=0.175中心 -> 上面は0.35)
+        # Tier 3: R <= 4.65, H=0.1 (Z=0.05中心 -> 上面は0.1)
+        # Ground: R > 4.65, H=0.0
+        
+        # 注: Cylinderのheightは全高なので、上面の高さは height と一致する (底面が0の場合)
+        # しかし、Genesisの配置では pos が中心座標なので、上面 = pos.z + height/2
+        
+        # Tier 1
+        if r <= 1.85:
+            return 0.6
+        # Tier 2
+        elif r <= 3.25:
+            return 0.35
+        # Tier 3
+        elif r <= 4.65:
+            return 0.1
+        # Ground
+        else:
+            return 0.0

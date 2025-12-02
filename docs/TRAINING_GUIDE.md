@@ -40,57 +40,44 @@ export CUDA_VISIBLE_DEVICES=0  # GPU 0を使用
 
 ## 訓練の実行
 
-### 基本的な訓練
+### 1. 平地移動訓練 (Phase 3-2a)
+
+Tri-starロボットの基礎的な移動能力（平地での移動）を学習させます。
+長時間学習時のメモリリークを防ぐため、`train_loop.py`を使用します。
 
 ```bash
-python train_rl.py --train --steps 100000
+# 10万ステップの訓練（1万ステップごとに再起動）
+python train_loop.py --steps 100000 --chunk 10000
 ```
 
 **パラメータ:**
-- `--train`: 訓練モード
-- `--steps`: 総訓練ステップ数（デフォルト: 100000）
+- `--steps`: 総訓練ステップ数
+- `--chunk`: プロセス再起動までのステップ数（メモリリーク対策）
 
-### 推奨訓練ステップ数
+### 2. 段差登坂訓練 (Phase 3-2b)
 
-| 目的 | ステップ数 | 所要時間（目安） |
-|------|-----------|----------------|
-| 動作確認 | 1,000 | 30秒 |
-| 基本動作習得 | 10,000 | 5分 |
-| 実用レベル | 100,000 | 30分 |
-| 高精度 | 500,000 | 2.5時間 |
-| 最高性能 | 1,000,000+ | 5時間以上 |
+平地移動で学習したモデルをベースに、段差登坂（Tier 1への移動）を学習させます。
+転移学習を行うため、`train_rl_step.py`を使用します。
 
-### 訓練の中断と再開
-
-訓練は`Ctrl+C`で中断できます。モデルは自動的に保存されます。
-
-**再開方法:**
-
-同じコマンドを実行すると、既存のモデルを読み込んで訓練を継続します：
 ```bash
-python train_rl.py --train --steps 100000
+# 平地モデルをベースに10万ステップ訓練
+python train_rl_step.py --steps 100000 --base_model xrobocon_ppo_tristar_flat.zip
 ```
 
-**重要な注意点:**
-- `--steps`で指定したステップ数は、**中断した地点からの追加ステップ数**です
-- 例: 50,000ステップで中断した場合、上記コマンドで150,000ステップまで訓練されます
-- 累積ステップ数はTensorBoardまたはコンソール出力で確認できます
+### 3. 訓練の中断と再開
 
-**既存のモデルを破棄して最初から訓練する場合:**
+`train_loop.py`を使用している場合、中断しても自動的に最新のモデルから再開されます。
+手動で中断（Ctrl+C）した場合もモデルは保存されます。
+
+**最初からやり直す場合:**
 ```bash
-# モデルファイルを削除
-rm xrobocon_ppo.zip
-
-# または別名でバックアップ
-mv xrobocon_ppo.zip xrobocon_ppo_backup_$(date +%Y%m%d_%H%M%S).zip
-
-# 新規訓練開始
-python train_rl.py --train --steps 100000
+rm xrobocon_ppo_tristar_flat.zip
+python train_loop.py --steps 100000
 ```
 
 ## ハイパーパラメータ調整
 
-### `train_rl.py`の編集
+### `train_rl_step.py`の編集
 
 より詳細な制御が必要な場合、`train_rl.py`を編集してPPOのパラメータを調整できます:
 
@@ -149,115 +136,24 @@ stability_penalty = abs(euler[0]) * 0.01 + abs(euler[1]) * 0.01  # デフォル�
 
 ## 訓練の監視
 
-### TensorBoardの使用（オプション）
+### コンソール出力
 
-TensorBoardを使用して訓練を可視化できます。
+`train_loop.py`は定期的に以下の情報を出力します:
+- 現在のステップ数
+- 直近10エピソードの平均報酬
+- 直近10エピソードの平均ステップ数
 
-1. `train_rl.py`を編集してログディレクトリを指定:
+### TensorBoard
 
-```python
-model = PPO(
-    "MlpPolicy",
-    env,
-    verbose=1,
-    tensorboard_log="./tensorboard_logs/",
-    device="mps"
-)
-```
-
-2. TensorBoardを起動:
+詳細なログはTensorBoardで確認できます:
 
 ```bash
-tensorboard --logdir=./tensorboard_logs/
+tensorboard --logdir ./xrobocon_tensorboard/
 ```
 
-3. ブラウザで `http://localhost:6006` を開く
-
-### コンソール出力の確認
-
-訓練中、以下のような出力が表示されます:
-
-```
------------------------------
-| time/              |      |
-|    fps             | 76   |
-|    iterations      | 1    |
-|    time_elapsed    | 26   |
-|    total_timesteps | 2048 |
------------------------------
-```
-
-**重要な指標:**
-- `fps`: シミュレーション速度（高いほど良い）
-- `iterations`: 訓練イテレーション数
-- `total_timesteps`: 累積ステップ数
-
-## 訓練済みモデルのテスト
-
-### 基本的なテスト
-
-```bash
-python train_rl.py --test
-```
-
-このコマンドで3Dビューアが開き、訓練済みエージェントの動作を確認できます。
-
-### テスト時の観察ポイント
-
-1. **ターゲットへの移動**: エージェントが目標に向かって移動しているか
-2. **安定性**: ロボットが転倒せずに移動しているか
-3. **スロープ登坂**: スロープを登れているか
-4. **到達精度**: ターゲットの近くまで到達できているか
-
-### パフォーマンス評価
-
-複数回テストを実行して成功率を測定:
-
-```bash
-# 10回テストを実行
-for i in {1..10}; do
-    echo "Test $i"
-    python train_rl.py --test
-done
-```
+ブラウザで `http://localhost:6006` にアクセスしてください。
 
 ## 学習結果の評価
-
-訓練が完了したら、以下の方法で学習結果を評価します。
-
-### 1. コンソール出力の解析
-
-訓練中に表示される統計情報から学習の進捗を確認できます。
-
-#### 基本的な出力例
-
-```
------------------------------
-| time/              |      |
-|    fps             | 25   |
-|    iterations      | 48   |
-|    time_elapsed    | 1234 |
-|    total_timesteps | 98304|
------------------------------
-```
-
-#### 重要な指標の意味
-
-| 指標 | 意味 | 良い値 | 悪い値 |
-|------|------|--------|--------|
-| `fps` | シミュレーション速度（フレーム/秒） | 50以上 | 20以下 |
-| `iterations` | 訓練イテレーション数 | - | - |
-| `total_timesteps` | 累積訓練ステップ数 | 目標値に到達 | 増加しない |
-| `time_elapsed` | 経過時間（秒） | - | - |
-
-**FPSが低い場合の原因:**
-- 他のアプリケーションがGPU/CPUを使用している
-- バッチサイズが大きすぎる
-- 描画が有効になっている（訓練時は無効化推奨）
-
-### 2. 訓練ログの確認
-
-訓練中のFPS変動を確認して、パフォーマンスの問題を特定します。
 
 ```bash
 # 訓練実行時の出力をファイルに保存
@@ -592,51 +488,92 @@ python evaluate_model.py > logs/eval_$(date +%Y%m%d_%H%M%S).txt
 2. 物理ステップを大きくする（精度は低下）: `dt=0.02`
 3. より高性能なGPUを使用
 
+## 訓練の監視
+
+### コンソール出力
+
+`train_loop.py`は定期的に以下の情報を出力します:
+- 現在のステップ数
+- 直近10エピソードの平均報酬
+- 直近10エピソードの平均ステップ数
+
+### TensorBoard
+
+詳細なログはTensorBoardで確認できます:
+
+```bash
+tensorboard --logdir ./xrobocon_tensorboard/
+```
+
+ブラウザで `http://localhost:6006` にアクセスしてください。
+
+## 学習結果の評価
+
+### 1. 訓練シナリオの確認
+
+学習前に、ロボットがどのような課題に取り組むかを確認できます。
+
+```bash
+python visualize_scenarios.py
+```
+
+### 2. 訓練済みモデルの可視化
+
+学習したモデルの挙動を3Dビューアで確認します。
+
+```bash
+python visualize_trained_model.py
+```
+
+このスクリプトは以下の機能を提供します:
+- 訓練済みモデルのロード（`xrobocon_ppo_tristar_flat.zip`）
+- 3回のエピソード実行と可視化
+- ロボットが目標から離れ始めた時点での自動一時停止（挙動分析用）
+
+### 3. 定量評価
+
+多数のエピソードを実行して成功率を測定します。
+
+```bash
+python evaluate_model.py --model xrobocon_ppo_tristar_flat.zip --episodes 100 --robot tristar
+```
+
+## トラブルシューティング
+
+### メモリ不足エラー
+
+Genesisシミュレータは長時間実行するとメモリを消費する傾向があります。
+`train_loop.py`を使用することで、定期的にプロセスを再起動し、メモリリークを回避できます。
+
+### MPS (Mac) エラー
+
+`NotImplementedError: The operator 'aten::linalg_qr' ...`
+
+このエラーが発生した場合、`xrobocon/common.py`によって自動的に環境変数が設定されるはずですが、手動で設定することも可能です:
+
+```bash
+export PYTORCH_ENABLE_MPS_FALLBACK=1
+```
+
+### ビューアが表示されない
+
+- 訓練中は`render_mode=None`になっているため表示されません。
+- 可視化スクリプト（`visualize_*.py`）を使用してください。
+- Macの場合、ウィンドウがバックグラウンドに隠れていることがあります。Mission Controlで確認してください。
+
 ## ベストプラクティス
 
 ### 1. 段階的な訓練
 
-```bash
-# ステップ1: 短時間テスト（1,000ステップ）
-python train_rl.py --train --steps 1000
-
-# ステップ2: 基本訓練（10,000ステップ）
-python train_rl.py --train --steps 10000
-
-# ステップ3: 本格訓練（100,000ステップ）
-python train_rl.py --train --steps 100000
-```
+1. **平地移動 (Phase 3-2a)**: `train_loop.py`で基礎移動を学習
+2. **段差登坂 (Phase 3-2b)**: `train_rl_step.py`で転移学習
 
 ### 2. 定期的なバックアップ
 
+`train_loop.py`は自動的にモデルを保存しますが、重要なマイルストーンでは手動でバックアップを取ることを推奨します。
+
 ```bash
-# 訓練前
-cp xrobocon_ppo.zip xrobocon_ppo_$(date +%Y%m%d_%H%M%S).zip
-
-# または自動化
-while true; do
-    python train_rl.py --train --steps 10000
-    cp xrobocon_ppo.zip backups/xrobocon_ppo_$(date +%Y%m%d_%H%M%S).zip
-done
-```
-
-### 3. 複数シナリオの訓練
-
-現在の実装では、4つのシナリオがランダムに選択されます。特定のシナリオに集中したい場合は、`xrobocon/env.py`を編集:
-
-```python
-# 特定シナリオのみ訓練
-scenario_type = 'start_ramp1'  # ランダム選択を無効化
-```
-
-### 4. カリキュラム学習（高度）
-
-簡単なタスクから難しいタスクへ段階的に訓練:
-
-```python
-# Phase 1: 平面移動のみ（coin_coin）
-# Phase 2: スロープ登坂（start_ramp1）
-# Phase 3: 全シナリオ
+cp xrobocon_ppo_tristar_flat.zip backups/tristar_flat_$(date +%Y%m%d).zip
 ```
 
 ## 次のステップ
@@ -651,5 +588,5 @@ scenario_type = 'start_ramp1'  # ランダム選択を無効化
 ## 参考資料
 
 - [Stable Baselines3 PPO Guide](https://stable-baselines3.readthedocs.io/en/master/guide/algos.html#ppo)
-- [RL Hyperparameter Tuning](https://stable-baselines3.readthedocs.io/en/master/guide/tuning.html)
+- [Genesis Performance Tips](https://genesis-world.readthedocs.io/en/latest/user_guide/performance.html)
 - [Genesis Performance Tips](https://genesis-world.readthedocs.io/en/latest/user_guide/performance.html)
