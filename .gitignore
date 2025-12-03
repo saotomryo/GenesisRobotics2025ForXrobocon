@@ -1,5 +1,6 @@
 # venv環境
 venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
@@ -22,4 +23,15 @@ build/
 .DS_Store
 Thumbs.db
 
+# Training artifacts
 ppo_xrobocon_tensorboard/
+*.zip
+models/
+demonstrations/
+*.npz
+
+# Logs
+*.log
+
+# Gemini artifacts (optional - コメントアウトを外すと除外)
+# .gemini/
