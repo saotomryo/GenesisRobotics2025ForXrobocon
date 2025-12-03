@@ -29,7 +29,7 @@ class XRoboconStepEnv(XRoboconBaseEnv):
         
         scenario_type = np.random.choice(
             ['flat_easy', 'step_straight', 'step_tier3_to_tier2'],
-            p=[0.5, 0.25, 0.25] # Phase 2: 平地50%, 段差50%
+            p=[1.0, 0.0, 0.0] # Phase 1: 平地のみ (100%)
         )
         
         scenarios = [

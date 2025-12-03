@@ -33,12 +33,12 @@ class XRoboconBaseEnv(gym.Env):
                 print(f"Genesis init skipped or failed: {e}")
         
         # レンダラーの設定
-        renderer = None
-        if self.visualize:
-            renderer = gs.renderers.Rasterizer()
+        self.renderer = None
+        if self.visualize or self.render_mode == "rgb_array":
+            self.renderer = gs.renderers.Rasterizer()
 
         viewer_options = None
-        if self.visualize:
+        if self.visualize or self.render_mode == "rgb_array":
             viewer_options = gs.options.ViewerOptions(
                 camera_pos=(3.0, -3.0, 2.5),
                 camera_lookat=(0.0, 0.0, 0.5),
@@ -51,9 +51,20 @@ class XRoboconBaseEnv(gym.Env):
                 dt=0.01,
                 gravity=(0.0, 0.0, -9.8),
             ),
-            show_viewer=self.visualize,
-            renderer=renderer,
+            show_viewer=self.visualize, # rgb_arrayの時はFalse
+            renderer=self.renderer,
         )
+        
+        # カメラ (rgb_array用、またはアクセス用)
+        self.camera = None
+        if self.visualize or self.render_mode == "rgb_array":
+            self.camera = self.scene.add_camera(
+                res=(640, 480),
+                pos=(3.0, -3.0, 2.5),
+                lookat=(0.0, 0.0, 0.5),
+                fov=40,
+                GUI=False
+            )
         
         # 地面
         self.plane = self.scene.add_entity(gs.morphs.Plane())
@@ -74,6 +85,9 @@ class XRoboconBaseEnv(gym.Env):
         
         # Action Space
         self.max_torque = 20.0
+        if self.robot_type == 'tristar_large':
+            self.max_torque = 300.0 # Large robot needs much more torque
+            
         if self.robot_type in ['tristar', 'tristar_large']:
             self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(4,), dtype=np.float32)
         else:

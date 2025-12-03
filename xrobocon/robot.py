@@ -54,7 +54,7 @@ class XRoboconRobot:
             
         forces = torch.zeros(self.n_dofs, device=gs.device)
         
-        if self.robot_type == 'tristar':
+        if self.robot_type == 'tristar' or self.robot_type == 'tristar_large':
             # Tri-star: 14 DOFs total (6 Free + 8 Actuated)
             # 0-5: Free Joint
             # 6: Left Frame
@@ -69,11 +69,15 @@ class XRoboconRobot:
                 frame_l, frame_r = 0.0, 0.0
                 wheel_l, wheel_r = actions[0], actions[1]
             
-            # Frame motors (High torque)
+            # tristar_largeの場合、フレームとホイールで異なるトルクを適用
+            # 注意: base_env._apply_action()で既にmax_torqueが掛けられているので、
+            # ここでは追加のスケーリングは不要。actionsはそのまま使う。
+            
+            # Frame motors
             forces[6] = float(frame_l)
             forces[10] = float(frame_r)
             
-            # Wheel motors (Speed)
+            # Wheel motors
             forces[7] = float(wheel_l)
             forces[8] = float(wheel_l)
             forces[9] = float(wheel_l)
