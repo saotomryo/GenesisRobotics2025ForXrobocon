@@ -199,6 +199,126 @@ class XRoboconStepEnv(XRoboconBaseEnv):
                     reward += pitch * params.get('pitch_reward_weight', 0.0) / 10.0 # 10度で weight 分の報酬
         
         return reward
+    
+    def _calculate_rocker_bogie_climbing_rewards(self, robot_pos, action, config):
+        """
+        Rocker-Bogie専用の段差登坂報酬を計算
+        
+        Args:
+            robot_pos: ロボット位置 (x, y, z)
+            action: アクション [left_drive, right_drive]
+            config: ロボット設定
+            
+        Returns:
+            float: 追加報酬
+        """
+        reward = 0.0
+        params = config['reward_params']
+        
+        # 姿勢情報を取得
+        euler = self.robot.get_euler()  # (roll, pitch, yaw) in degrees
+        roll, pitch, yaw = euler
+        
+        # 速度情報を取得
+        vel = self.robot.get_vel()
+        if hasattr(vel, 'cpu'):
+            vel = vel.cpu().numpy()
+        
+        # 1. 正面アプローチ報酬（ターゲット方向への整列）
+        if self.current_target:
+            target_pos = np.array(self.current_target['pos'])
+            dist_to_target = np.linalg.norm(robot_pos[:2] - target_pos[:2])
+            
+            # ターゲットへの方向ベクトル
+            to_target = target_pos[:2] - robot_pos[:2]
+            target_angle = np.degrees(np.arctan2(to_target[1], to_target[0]))
+            
+            # ロボットの向きとの角度差
+            angle_diff = abs(((target_angle - yaw + 180) % 360) - 180)
+            
+            # 許容範囲内なら報酬、外ならペナルティ
+            alignment_tolerance = params.get('alignment_tolerance', 15.0)
+            if angle_diff < alignment_tolerance:
+                alignment_reward = (alignment_tolerance - angle_diff) / alignment_tolerance
+                reward += alignment_reward * params.get('alignment_reward_weight', 0.0)
+            else:
+                # 大きくずれている場合はペナルティ
+                reward -= (angle_diff - alignment_tolerance) * 0.1
+        
+        # 2. 速度制御報酬（段差接近時の適切な速度）
+        if self.current_target:
+            target_pos = np.array(self.current_target['pos'])
+            dist_to_target = np.linalg.norm(robot_pos[:2] - target_pos[:2])
+            
+            # 段差に近い場合（distance_threshold以内）
+            distance_threshold = params.get('distance_threshold', 0.5)
+            if dist_to_target < distance_threshold:
+                # 現在の速度
+                current_speed = np.linalg.norm(vel[:2])
+                optimal_speed = params.get('optimal_approach_speed', 0.3)
+                
+                # 最適速度との差分をペナルティ化
+                speed_error = abs(current_speed - optimal_speed)
+                speed_reward = -speed_error * params.get('approach_speed_weight', 0.0)
+                reward += speed_reward
+        
+        # 3. ピッチ角報酬（段差登坂時の前傾姿勢）
+        if self.current_target:
+            target_pos = np.array(self.current_target['pos'])
+            dist_to_target = np.linalg.norm(robot_pos[:2] - target_pos[:2])
+            
+            # 段差までの距離に応じて目標ピッチ角を調整
+            distance_threshold = params.get('distance_threshold', 0.5)
+            if dist_to_target < distance_threshold:
+                # 近い: 前傾を奨励
+                target_pitch = params.get('target_pitch_near', 15.0)
+            else:
+                # 遠い: 水平を奨励
+                target_pitch = params.get('target_pitch_far', 0.0)
+            
+            # 目標ピッチ角との差分をペナルティ化
+            pitch_error = abs(pitch - target_pitch)
+            pitch_reward = -pitch_error * params.get('pitch_reward_weight', 0.0) / 10.0
+            reward += pitch_reward
+        
+        # 4. 高さ獲得ボーナス
+        # 一定の高さ（Tier到達）時にボーナス
+        height_bonus = params.get('height_gain_bonus', 0.0)
+        if robot_pos[2] > 0.3:  # Tier 1到達（60cm）
+            reward += height_bonus * 0.5
+        if robot_pos[2] > 0.6:  # Tier 2到達（35cm）
+            reward += height_bonus
+        if robot_pos[2] > 0.95:  # Tier 3到達（10cm）
+            reward += height_bonus * 1.5
+        
+        # 5. 安定性ペナルティ
+        # ロール角ペナルティ（横転防止）
+        max_safe_roll = params.get('max_safe_roll', 20.0)
+        if abs(roll) > max_safe_roll:
+            roll_penalty = (abs(roll) - max_safe_roll) * params.get('roll_penalty_weight', 0.0)
+            reward -= roll_penalty
+        
+        # Z軸速度ペナルティ（ジャンプ抑制）
+        z_vel = abs(vel[2])
+        z_threshold = 0.1  # rocker_bogieは段差登坂時にZ速度が出るので閾値を緩く
+        if z_vel > z_threshold:
+            z_penalty = (z_vel - z_threshold) * params.get('z_velocity_penalty_weight', 0.0)
+            reward -= z_penalty
+        
+        # 6. 継続的推進力報酬
+        # 前進速度報酬（停止を防ぐ）
+        forward_speed = vel[0]  # X軸方向の速度
+        if forward_speed > 0:
+            reward += forward_speed * params.get('forward_progress_weight', 0.0)
+        
+        # 7. アクション平滑化報酬（急激な操作を抑制）
+        if self.last_action is not None:
+            action_diff = np.abs(action - self.last_action).sum()
+            smoothness_reward = -action_diff * params.get('action_smoothness_weight', 0.0)
+            reward += smoothness_reward
+        
+        return reward
+
 
     def step(self, action):
         # 共通のアクション適用
@@ -240,11 +360,18 @@ class XRoboconStepEnv(XRoboconBaseEnv):
                 reward += z_diff * height_weight
             self.prev_height = robot_pos[2]
             
-            # 2.5. Tri-star専用の段差登坂報酬 + 整列報酬
+            # 2.5. 専用報酬の計算
             from xrobocon.robot_configs import get_robot_config
             config = get_robot_config(self.robot_type)
             if config['reward_params'].get('use_specialized_rewards', False):
-                specialized_reward = self._calculate_tristar_climbing_rewards(robot_pos, action, config)
+                # ロボットタイプに応じて専用報酬を計算
+                if self.robot_type in ['tristar', 'tristar_large']:
+                    specialized_reward = self._calculate_tristar_climbing_rewards(robot_pos, action, config)
+                elif self.robot_type == 'rocker_bogie':
+                    specialized_reward = self._calculate_rocker_bogie_climbing_rewards(robot_pos, action, config)
+                else:
+                    specialized_reward = 0.0
+                
                 reward += specialized_reward
                 
                 # 整列報酬 (Alignment Reward)

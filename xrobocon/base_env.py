@@ -12,7 +12,7 @@ class XRoboconBaseEnv(gym.Env):
     共通の初期化処理とインターフェースを提供します。
     """
     
-    def __init__(self, render_mode=None, robot_type='tristar'):
+    def __init__(self, render_mode=None, robot_type='standard'):
         super().__init__()
         
         self.render_mode = render_mode
@@ -20,33 +20,19 @@ class XRoboconBaseEnv(gym.Env):
         self.robot_type = robot_type
         
         # Genesis初期化
-        if hasattr(gs, 'is_initialized'):
-            if not gs.is_initialized():
-                try:
-                    gs.init(backend=gs.gpu)
-                except Exception as e:
-                    print(f"Genesis init skipped or failed: {e}")
-        else:
-            try:
-                gs.init(backend=gs.gpu)
-            except Exception as e:
-                print(f"Genesis init skipped or failed: {e}")
+        import xrobocon.common as common
+        common.setup_genesis()
         
-        # レンダラーの設定
-        self.renderer = None
-        if self.visualize or self.render_mode == "rgb_array":
-            self.renderer = gs.renderers.Rasterizer()
-
-        viewer_options = None
-        if self.visualize or self.render_mode == "rgb_array":
-            viewer_options = gs.options.ViewerOptions(
+        # 描画設定
+        self.renderer = gs.renderers.Rasterizer() if self.visualize or render_mode == "rgb_array" else None
+        
+        # シーン作成
+        self.scene = gs.Scene(
+            viewer_options=gs.options.ViewerOptions(
                 camera_pos=(3.0, -3.0, 2.5),
                 camera_lookat=(0.0, 0.0, 0.5),
                 camera_fov=40,
-            )
-
-        self.scene = gs.Scene(
-            viewer_options=viewer_options,
+            ),
             rigid_options=gs.options.RigidOptions(
                 dt=0.01,
                 gravity=(0.0, 0.0, -9.8),
@@ -56,15 +42,13 @@ class XRoboconBaseEnv(gym.Env):
         )
         
         # カメラ (rgb_array用、またはアクセス用)
-        self.camera = None
-        if self.visualize or self.render_mode == "rgb_array":
-            self.camera = self.scene.add_camera(
-                res=(640, 480),
-                pos=(3.0, -3.0, 2.5),
-                lookat=(0.0, 0.0, 0.5),
-                fov=40,
-                GUI=False
-            )
+        self.camera = self.scene.add_camera(
+            res=(640, 480),
+            pos=(3.0, -3.0, 2.5),
+            lookat=(0.0, 0.0, 0.5),
+            fov=40,
+            GUI=False
+        )
         
         # 地面
         self.plane = self.scene.add_entity(gs.morphs.Plane())
@@ -80,6 +64,19 @@ class XRoboconBaseEnv(gym.Env):
         self.game = XRoboconGame(self.field, self.robot)
         self.field.add_coin_spots(self.scene, self.game.spots)
         
+        # 目標マーカー（シーンビルド前に追加）
+        self.target_marker = None
+        if self.render_mode == "human":
+            self.target_marker = self.scene.add_entity(
+                gs.morphs.Sphere(
+                    pos=(0.0, 0.0, -10.0),  # 初期位置は地下（見えない位置）
+                    radius=0.15,
+                    fixed=True,
+                ),
+                material=gs.materials.Rigid(),
+                surface=gs.surfaces.Default(color=(0.0, 1.0, 0.0))  # 緑色
+            )
+        
         self.scene.build()
         self.robot.post_build()
         
@@ -87,16 +84,24 @@ class XRoboconBaseEnv(gym.Env):
         self.max_torque = 20.0
         if self.robot_type == 'tristar_large':
             self.max_torque = 300.0 # Large robot needs much more torque
+        elif self.robot_type == 'rocker_bogie':
+            self.max_torque = 40.0  # From robot_configs.py
+        elif self.robot_type == 'rocker_bogie_large':
+            self.max_torque = 90.0  # From robot_configs.py
             
-        if self.robot_type in ['tristar', 'tristar_large']:
+        if self.robot_type == 'tristar':
             self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(4,), dtype=np.float32)
+        elif self.robot_type == 'tristar_large':
+            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(4,), dtype=np.float32)
+        elif self.robot_type in ['rocker_bogie', 'rocker_bogie_large']:
+            self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=np.float32)
         else:
             self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(2,), dtype=np.float32)
         
         # Observation Space
         # - Robot Pos (3)
         # - Robot Euler (3)
-        # - Robot Lin Vel (3)
+        # - Robot Vel (3)
         # - Robot Ang Vel (3)
         # - Target Vector (3)
         # - Height Map (5x5 = 25)
@@ -127,6 +132,10 @@ class XRoboconBaseEnv(gym.Env):
         self.current_target = {'pos': target_pos, 'tier': 0}
         robot_pos = self.robot.get_pos().cpu().numpy()
         self.prev_dist = np.linalg.norm(robot_pos[:2] - np.array(target_pos)[:2])
+        
+        # 目標マーカーの位置を更新
+        if self.target_marker is not None:
+            self.target_marker.set_pos(target_pos)
 
     def _get_obs(self):
         pos = self.robot.get_pos().cpu().numpy()

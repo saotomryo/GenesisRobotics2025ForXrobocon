@@ -54,7 +54,30 @@ class XRoboconRobot:
             
         forces = torch.zeros(self.n_dofs, device=gs.device)
         
-        if self.robot_type == 'tristar' or self.robot_type == 'tristar_large':
+        if self.robot_type in ['rocker_bogie', 'rocker_bogie_large']:
+            # Rocker-Bogie: 6 motors (Left: Front, Mid, Rear / Right: Front, Mid, Rear)
+            # アクチュエーターに直接トルクを適用
+            
+            left_cmd = float(actions[0])
+            right_cmd = float(actions[1])
+            
+            # Genesisのアクチュエーター制御
+            # set_dofs_velocityではなく、control_dofs_forceを使用
+            # ただし、アクチュエーターのみに適用する必要がある
+            
+            # 配列の最後の6要素がアクチュエーター
+            # XMLの順序: FL, ML, RL, FR, MR, RR
+            # Left Motors (最初の3つ)
+            forces[-6] = left_cmd  # Left Front
+            forces[-5] = left_cmd  # Left Middle
+            forces[-4] = left_cmd  # Left Rear
+            
+            # Right Motors (最後の3つ)
+            forces[-3] = right_cmd # Right Front
+            forces[-2] = right_cmd # Right Middle
+            forces[-1] = right_cmd # Right Rear
+
+        elif self.robot_type == 'tristar' or self.robot_type == 'tristar_large':
             # Tri-star: 14 DOFs total (6 Free + 8 Actuated)
             # 0-5: Free Joint
             # 6: Left Frame
@@ -92,6 +115,7 @@ class XRoboconRobot:
             forces[-2] = float(left)
             forces[-1] = float(right)
             
+        # 力を適用
         self.entity.control_dofs_force(forces)
         
     def set_wheel_torques(self, left, right):

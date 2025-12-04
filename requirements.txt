@@ -1,4 +1,7 @@
-genesis-world>=0.1.0
-torch>=2.0.0
-numpy>=1.24.0
+genesis-world
+stable-baselines3
+shimmy>=0.2.1
+tensorboard
 opencv-python
+PySide6
+matplotlib

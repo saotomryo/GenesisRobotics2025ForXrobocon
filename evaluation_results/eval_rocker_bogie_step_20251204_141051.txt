@@ -1,0 +1,552 @@
+======================================================================
+評価結果レポート
+======================================================================
+
+日時: 2025-12-04 14:10:52
+ロボット: rocker_bogie
+モデル: xrobocon_ppo_rocker_bogie_step.zip
+環境: step
+評価エピソード数: 10
+
+======================================================================
+
+[38;5;159m[Genesis] [14:08:13] [INFO] [38;5;121m╭───────────────────────────────────────────────╮[0m[38;5;159m[0m
+[38;5;159m[Genesis] [14:08:13] [INFO] [38;5;121m│┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈[0m[38;5;159m [38;5;121m[1m[3mGenesis[0m[38;5;159m [38;5;121m┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈┉┈│[0m[38;5;159m[0m
+[38;5;159m[Genesis] [14:08:13] [INFO] [38;5;121m╰───────────────────────────────────────────────╯[0m[38;5;159m[0m
+[38;5;159m[Genesis] [14:08:13] [INFO] Running on [38;5;121m[4m[Apple M4][0m[38;5;159m with backend [38;5;121m[4mgs.metal[0m[38;5;159m. Device memory: [38;5;121m[4m16.00[0m[38;5;159m GB.[0m
+[38;5;159m[Genesis] [14:08:13] [INFO] 🚀 Genesis initialized. 🔖 version: [38;5;121m[4m0.3.7[0m[38;5;159m, 🎨 theme: [38;5;121m[4mdark[0m[38;5;159m, 🌱 seed: [38;5;121m[4mNone[0m[38;5;159m, 🐛 debug: [38;5;121m[4mFalse[0m[38;5;159m, 📏 precision: [38;5;121m[4m32[0m[38;5;159m, 🏎️ performance: [38;5;121m[4mFalse[0m[38;5;159m, 💬 verbose: [38;5;121m[4mINFO[0m[38;5;159m[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Scene [38;5;121m[3m<2917a7e>[0m[38;5;159m created.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m0[0m[38;5;159m, uid: [38;5;121m[3m<a3f6c23>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Plane>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m1[0m[38;5;159m, uid: [38;5;121m[3m<450c2fc>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+Tier 1 created: Radius=1.85m, Height=0.6m, Z=0.3m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m2[0m[38;5;159m, uid: [38;5;121m[3m<26645bc>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+Tier 2 created: Radius=3.25m, Height=0.35m, Z=0.175m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m3[0m[38;5;159m, uid: [38;5;121m[3m<fdcccd9>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+Tier 3 created: Radius=4.65m, Height=0.1m, Z=0.05m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m4[0m[38;5;159m, uid: [38;5;121m[3m<2990b8c>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.MJCF(file='/Users/saotome2/develop/GenesisRobotics/xrobocon/assets/robot_rocker_bogie.xml')>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Applying offset to base link's pose with user provided value in morph.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m5[0m[38;5;159m, uid: [38;5;121m[3m<ab6fe77>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m6[0m[38;5;159m, uid: [38;5;121m[3m<95e306b>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m7[0m[38;5;159m, uid: [38;5;121m[3m<b711c11>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m8[0m[38;5;159m, uid: [38;5;121m[3m<5ed5e13>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m9[0m[38;5;159m, uid: [38;5;121m[3m<64a0846>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m10[0m[38;5;159m, uid: [38;5;121m[3m<5465869>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m11[0m[38;5;159m, uid: [38;5;121m[3m<00c4990>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m12[0m[38;5;159m, uid: [38;5;121m[3m<67eab61>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m13[0m[38;5;159m, uid: [38;5;121m[3m<1b744bd>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m14[0m[38;5;159m, uid: [38;5;121m[3m<a9a7a08>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m15[0m[38;5;159m, uid: [38;5;121m[3m<b1406c4>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m16[0m[38;5;159m, uid: [38;5;121m[3m<8043a6e>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m17[0m[38;5;159m, uid: [38;5;121m[3m<b380eda>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m18[0m[38;5;159m, uid: [38;5;121m[3m<362ffaa>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m19[0m[38;5;159m, uid: [38;5;121m[3m<b98b14c>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m20[0m[38;5;159m, uid: [38;5;121m[3m<39f8071>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m21[0m[38;5;159m, uid: [38;5;121m[3m<9a7875c>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m22[0m[38;5;159m, uid: [38;5;121m[3m<a2a66d4>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m23[0m[38;5;159m, uid: [38;5;121m[3m<a418b2d>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Adding [38;5;121m<gs.RigidEntity>[0m[38;5;159m. idx: [38;5;121m24[0m[38;5;159m, uid: [38;5;121m[3m<356cca0>[0m[38;5;159m, morph: [38;5;121m<gs.morphs.Cylinder>[0m[38;5;159m, material: [38;5;121m<gs.materials.Rigid>[0m[38;5;159m.[0m
+[38;5;159m[Genesis] [14:08:14] [INFO] Building scene [38;5;121m[3m<2917a7e>[0m[38;5;159m...[0m
+/Users/saotome2/develop/GenesisRobotics/.venv/lib/python3.12/site-packages/genesis/engine/solvers/rigid/support_field_decomp.py:59: RuntimeWarning: divide by zero encountered in matmul
+  dot_chunk = v1[i:end] @ this_pos.T
+/Users/saotome2/develop/GenesisRobotics/.venv/lib/python3.12/site-packages/genesis/engine/solvers/rigid/support_field_decomp.py:59: RuntimeWarning: overflow encountered in matmul
+  dot_chunk = v1[i:end] @ this_pos.T
+/Users/saotome2/develop/GenesisRobotics/.venv/lib/python3.12/site-packages/genesis/engine/solvers/rigid/support_field_decomp.py:59: RuntimeWarning: invalid value encountered in matmul
+  dot_chunk = v1[i:end] @ this_pos.T
+/Users/saotome2/develop/GenesisRobotics/.venv/lib/python3.12/site-packages/genesis/engine/solvers/rigid/rigid_solver_decomp.py:352: RuntimeWarning: divide by zero encountered in matmul
+  mass_mat_inv = (mass_mat_L_inv * mass_mat_D_inv[:, i_b]) @ mass_mat_L_inv.T
+/Users/saotome2/develop/GenesisRobotics/.venv/lib/python3.12/site-packages/genesis/engine/solvers/rigid/rigid_solver_decomp.py:352: RuntimeWarning: overflow encountered in matmul
+  mass_mat_inv = (mass_mat_L_inv * mass_mat_D_inv[:, i_b]) @ mass_mat_L_inv.T
+/Users/saotome2/develop/GenesisRobotics/.venv/lib/python3.12/site-packages/genesis/engine/solvers/rigid/rigid_solver_decomp.py:352: RuntimeWarning: invalid value encountered in matmul
+  mass_mat_inv = (mass_mat_L_inv * mass_mat_D_inv[:, i_b]) @ mass_mat_L_inv.T
+[38;5;159m[Genesis] [14:08:17] [INFO] Compiling simulation kernels...[0m
+[38;5;159m[Genesis] [14:08:23] [INFO] Building visualizer...[0m
+/Users/saotome2/develop/GenesisRobotics/.venv/lib/python3.12/site-packages/torch/utils/_device.py:103: UserWarning: The operator 'aten::linalg_qr.out' is not currently supported on the MPS backend and will fall back to run on the CPU. This may have performance implications. (Triggered internally at /Users/runner/work/pytorch/pytorch/pytorch/aten/src/ATen/mps/MPSFallback.mm:15.)
+  return func(*args, **kwargs)
+Robot (rocker_bogie) initialized with 16 DOFs
+Loading model from: /Users/saotome2/develop/GenesisRobotics/xrobocon_ppo_rocker_bogie_step.zip
+Wrapping the env with a `Monitor` wrapper
+Wrapping the env in a DummyVecEnv.
+
+10エピソードの評価を開始 (step environment)...
+Game Started!
+[38;5;159m[Genesis] [14:08:25] [INFO] Running at [38;5;121m34.60[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:25] [INFO] Running at [38;5;121m43.24[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:25] [INFO] Running at [38;5;121m43.13[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:25] [INFO] Running at [38;5;121m43.23[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:25] [INFO] Running at [38;5;121m43.12[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:25] [INFO] Running at [38;5;121m42.99[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m43.13[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m34.62[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m43.45[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m43.66[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m43.87[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m43.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m44.08[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m44.02[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:26] [INFO] Running at [38;5;121m43.95[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m44.05[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m44.18[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m52.84[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m44.08[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m52.70[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m43.95[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m52.56[0m[38;5;159m FPS.[0m
+Episode  1 [flat_easy]: 報酬= 244.35, ステップ= 114, 最小距離=0.797m, 成功
+Game Started!
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m35.25[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:27] [INFO] Running at [38;5;121m44.05[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m35.45[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m44.37[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m44.35[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m44.36[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m44.15[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m44.07[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m44.19[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m44.32[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:28] [INFO] Running at [38;5;121m44.39[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m44.47[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m44.54[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m44.66[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m44.51[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m35.74[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m35.71[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m44.40[0m[38;5;159m FPS.[0m
+Episode  2 [step_straight]: 報酬= 405.04, ステップ=  84, 最小距離=0.800m, 成功
+Game Started!
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m35.62[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:29] [INFO] Running at [38;5;121m44.74[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.72[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.72[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.61[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.51[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.63[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.65[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.73[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.79[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:30] [INFO] Running at [38;5;121m44.90[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m45.11[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m45.05[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m45.11[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m45.04[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m44.83[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m44.71[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m44.60[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m44.84[0m[38;5;159m FPS.[0m
+Episode  3 [flat_easy]: 報酬= 335.73, ステップ=  99, 最小距離=0.798m, 成功
+Game Started!
+[38;5;159m[Genesis] [14:08:31] [INFO] Running at [38;5;121m52.99[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:32] [INFO] Running at [38;5;121m43.79[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:32] [INFO] Running at [38;5;121m26.08[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:32] [INFO] Running at [38;5;121m26.10[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:32] [INFO] Running at [38;5;121m34.92[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:32] [INFO] Running at [38;5;121m34.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:32] [INFO] Running at [38;5;121m35.10[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:32] [INFO] Running at [38;5;121m35.14[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:32] [INFO] Running at [38;5;121m35.21[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m43.90[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m35.27[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m35.09[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m43.62[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m43.36[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m43.10[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m34.57[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m34.54[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:33] [INFO] Running at [38;5;121m34.70[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m34.75[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m34.68[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m34.61[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m34.52[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m34.50[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m34.25[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m42.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m43.00[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:34] [INFO] Running at [38;5;121m34.56[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:35] [INFO] Running at [38;5;121m34.41[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:35] [INFO] Running at [38;5;121m34.16[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:35] [INFO] Running at [38;5;121m33.98[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:35] [INFO] Running at [38;5;121m33.71[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:35] [INFO] Running at [38;5;121m25.45[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:35] [INFO] Running at [38;5;121m25.61[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:35] [INFO] Running at [38;5;121m34.07[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:35] [INFO] Running at [38;5;121m42.75[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:36] [INFO] Running at [38;5;121m42.66[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:36] [INFO] Running at [38;5;121m34.00[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:36] [INFO] Running at [38;5;121m33.81[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:36] [INFO] Running at [38;5;121m33.62[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:36] [INFO] Running at [38;5;121m25.35[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:36] [INFO] Running at [38;5;121m33.62[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:36] [INFO] Running at [38;5;121m25.40[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:36] [INFO] Running at [38;5;121m33.67[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m25.43[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m25.52[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m25.63[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m25.81[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m34.30[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m34.42[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m43.25[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m43.22[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:37] [INFO] Running at [38;5;121m34.47[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m34.47[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m43.26[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m43.26[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m34.58[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m26.11[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m26.27[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m34.76[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m26.24[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:38] [INFO] Running at [38;5;121m34.81[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:39] [INFO] Running at [38;5;121m34.68[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:39] [INFO] Running at [38;5;121m34.60[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:39] [INFO] Running at [38;5;121m34.45[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:39] [INFO] Running at [38;5;121m33.98[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:39] [INFO] Running at [38;5;121m25.60[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:39] [INFO] Running at [38;5;121m25.60[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:39] [INFO] Running at [38;5;121m34.01[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:39] [INFO] Running at [38;5;121m25.57[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m25.74[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m34.48[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m43.13[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m34.50[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m34.71[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m43.67[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m43.76[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m34.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:40] [INFO] Running at [38;5;121m34.71[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:41] [INFO] Running at [38;5;121m34.53[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:41] [INFO] Running at [38;5;121m34.40[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:41] [INFO] Running at [38;5;121m34.33[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:41] [INFO] Running at [38;5;121m25.81[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:41] [INFO] Running at [38;5;121m34.32[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:41] [INFO] Running at [38;5;121m34.08[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:41] [INFO] Running at [38;5;121m33.84[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:41] [INFO] Running at [38;5;121m25.56[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:42] [INFO] Running at [38;5;121m33.86[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:42] [INFO] Running at [38;5;121m33.70[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:42] [INFO] Running at [38;5;121m42.30[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:42] [INFO] Running at [38;5;121m42.61[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:42] [INFO] Running at [38;5;121m42.52[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:42] [INFO] Running at [38;5;121m33.68[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:42] [INFO] Running at [38;5;121m25.18[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:42] [INFO] Running at [38;5;121m33.58[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m33.48[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m25.28[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m33.53[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m33.36[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m33.19[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m25.05[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m33.68[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m42.20[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:43] [INFO] Running at [38;5;121m33.59[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:44] [INFO] Running at [38;5;121m16.90[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:44] [INFO] Running at [38;5;121m25.31[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:44] [INFO] Running at [38;5;121m25.32[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:44] [INFO] Running at [38;5;121m25.49[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:44] [INFO] Running at [38;5;121m33.86[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:44] [INFO] Running at [38;5;121m33.84[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:44] [INFO] Running at [38;5;121m33.73[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:44] [INFO] Running at [38;5;121m33.74[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m33.73[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m33.71[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m33.69[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m33.46[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m24.94[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m16.72[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m25.08[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m25.23[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:45] [INFO] Running at [38;5;121m33.54[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:46] [INFO] Running at [38;5;121m33.52[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:46] [INFO] Running at [38;5;121m33.59[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:46] [INFO] Running at [38;5;121m41.72[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:46] [INFO] Running at [38;5;121m16.77[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:46] [INFO] Running at [38;5;121m25.21[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:46] [INFO] Running at [38;5;121m25.24[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:46] [INFO] Running at [38;5;121m33.64[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:46] [INFO] Running at [38;5;121m33.54[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m25.33[0m[38;5;159m FPS.[0m
+Episode  4 [step_tier3_to_tier2]: 報酬=1621.11, ステップ= 500, 最小距離=0.909m, 失敗
+Game Started!
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m33.11[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m41.62[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m41.56[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m41.55[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m41.53[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m33.40[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m33.67[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:47] [INFO] Running at [38;5;121m42.24[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:48] [INFO] Running at [38;5;121m42.31[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:48] [INFO] Running at [38;5;121m42.51[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:48] [INFO] Running at [38;5;121m42.74[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:48] [INFO] Running at [38;5;121m25.81[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:48] [INFO] Running at [38;5;121m34.49[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:48] [INFO] Running at [38;5;121m42.95[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:48] [INFO] Running at [38;5;121m42.92[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:48] [INFO] Running at [38;5;121m42.84[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m34.43[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m42.98[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m42.96[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m43.24[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m43.47[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m43.51[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m43.61[0m[38;5;159m FPS.[0m
+Episode  5 [flat_easy]: 報酬= 326.57, ステップ= 105, 最小距離=0.800m, 成功
+Game Started!
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m34.97[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m43.75[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:49] [INFO] Running at [38;5;121m35.17[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:50] [INFO] Running at [38;5;121m43.79[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:50] [INFO] Running at [38;5;121m43.76[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:50] [INFO] Running at [38;5;121m43.68[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:50] [INFO] Running at [38;5;121m43.80[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:50] [INFO] Running at [38;5;121m43.87[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:50] [INFO] Running at [38;5;121m44.06[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:50] [INFO] Running at [38;5;121m44.20[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:50] [INFO] Running at [38;5;121m44.20[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m44.28[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m44.34[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m44.32[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m44.17[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m44.05[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m35.33[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m44.21[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m35.41[0m[38;5;159m FPS.[0m
+Episode  6 [flat_easy]: 報酬= 350.78, ステップ=  93, 最小距離=0.799m, 成功
+Game Started!
+[38;5;159m[Genesis] [14:08:51] [INFO] Running at [38;5;121m35.36[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m44.12[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m35.34[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m44.03[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m44.00[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m43.84[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m43.78[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m43.87[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m43.87[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:52] [INFO] Running at [38;5;121m43.96[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m44.05[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m43.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m26.49[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m26.63[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m26.76[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m35.80[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m35.84[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m36.02[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:53] [INFO] Running at [38;5;121m36.18[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m45.01[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m44.99[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m45.05[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m45.20[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m45.07[0m[38;5;159m FPS.[0m
+Episode  7 [flat_easy]: 報酬= 355.96, ステップ= 106, 最小距離=0.798m, 成功
+Game Started!
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m27.17[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m45.07[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m35.99[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:54] [INFO] Running at [38;5;121m53.84[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m44.82[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m35.87[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m35.89[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m35.86[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m35.89[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m44.82[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m35.96[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m44.74[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:55] [INFO] Running at [38;5;121m35.73[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m35.88[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m35.88[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m44.71[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m53.49[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m44.66[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m35.89[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m35.88[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m35.94[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:56] [INFO] Running at [38;5;121m35.76[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m26.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m45.08[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m45.10[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m35.95[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m26.90[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m35.77[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m26.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m36.00[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:57] [INFO] Running at [38;5;121m27.00[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m36.16[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m45.18[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m36.31[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m35.95[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m27.09[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m35.76[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m35.45[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m35.14[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:58] [INFO] Running at [38;5;121m34.88[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:59] [INFO] Running at [38;5;121m34.62[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:59] [INFO] Running at [38;5;121m34.38[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:59] [INFO] Running at [38;5;121m25.96[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:59] [INFO] Running at [38;5;121m26.06[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:59] [INFO] Running at [38;5;121m26.22[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:59] [INFO] Running at [38;5;121m26.37[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:59] [INFO] Running at [38;5;121m26.44[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:08:59] [INFO] Running at [38;5;121m26.58[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m35.13[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m26.48[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m26.51[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m26.66[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m26.80[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m26.85[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m26.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m44.81[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m35.87[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:00] [INFO] Running at [38;5;121m26.59[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:01] [INFO] Running at [38;5;121m17.80[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:01] [INFO] Running at [38;5;121m35.64[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:01] [INFO] Running at [38;5;121m35.59[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:01] [INFO] Running at [38;5;121m35.41[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:01] [INFO] Running at [38;5;121m35.61[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:01] [INFO] Running at [38;5;121m44.25[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:01] [INFO] Running at [38;5;121m35.14[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:01] [INFO] Running at [38;5;121m26.41[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m35.31[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m35.51[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m35.38[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m26.58[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m35.64[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m35.83[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m35.94[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m35.71[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:02] [INFO] Running at [38;5;121m35.72[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m44.55[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m35.76[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m35.41[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m35.42[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m44.19[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m35.45[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m26.69[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m26.64[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:03] [INFO] Running at [38;5;121m35.21[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m26.56[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m26.70[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m26.84[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m35.47[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m26.74[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m26.73[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m35.32[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m26.31[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:04] [INFO] Running at [38;5;121m26.18[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:05] [INFO] Running at [38;5;121m34.66[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:05] [INFO] Running at [38;5;121m34.44[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:05] [INFO] Running at [38;5;121m34.18[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:05] [INFO] Running at [38;5;121m34.37[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:05] [INFO] Running at [38;5;121m42.81[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:05] [INFO] Running at [38;5;121m34.03[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:05] [INFO] Running at [38;5;121m34.02[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:05] [INFO] Running at [38;5;121m42.57[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m34.22[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m25.78[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m25.92[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m26.08[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m34.76[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m43.38[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m34.70[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m34.44[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:06] [INFO] Running at [38;5;121m25.90[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:07] [INFO] Running at [38;5;121m25.95[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:07] [INFO] Running at [38;5;121m34.46[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:07] [INFO] Running at [38;5;121m42.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:07] [INFO] Running at [38;5;121m34.32[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:07] [INFO] Running at [38;5;121m34.46[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:07] [INFO] Running at [38;5;121m43.10[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:07] [INFO] Running at [38;5;121m34.72[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:07] [INFO] Running at [38;5;121m34.46[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m25.95[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m26.12[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m26.28[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m26.42[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m44.03[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m35.38[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m17.77[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m17.66[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:08] [INFO] Running at [38;5;121m17.51[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m26.02[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m34.52[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m25.99[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m25.91[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m25.73[0m[38;5;159m FPS.[0m
+Episode  8 [step_tier3_to_tier2]: 報酬=1614.18, ステップ= 500, 最小距離=0.911m, 失敗
+Game Started!
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m34.28[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m43.12[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m34.33[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:09] [INFO] Running at [38;5;121m34.39[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m34.57[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m34.72[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m34.82[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m34.97[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m43.59[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m43.53[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m34.65[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m34.73[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:10] [INFO] Running at [38;5;121m43.42[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:11] [INFO] Running at [38;5;121m43.32[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:11] [INFO] Running at [38;5;121m43.34[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:11] [INFO] Running at [38;5;121m43.36[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:11] [INFO] Running at [38;5;121m34.54[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:11] [INFO] Running at [38;5;121m34.69[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:11] [INFO] Running at [38;5;121m43.49[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:11] [INFO] Running at [38;5;121m43.54[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:11] [INFO] Running at [38;5;121m43.53[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m43.46[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m43.52[0m[38;5;159m FPS.[0m
+Episode  9 [flat_easy]: 報酬= 311.88, ステップ= 104, 最小距離=0.796m, 成功
+Game Started!
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m34.82[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m35.01[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m35.10[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m35.26[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m35.39[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m35.47[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:12] [INFO] Running at [38;5;121m44.15[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m44.10[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m43.86[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m43.72[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m43.68[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m35.11[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m43.77[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m35.18[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m26.50[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:13] [INFO] Running at [38;5;121m35.32[0m[38;5;159m FPS.[0m
+[38;5;159m[Genesis] [14:09:14] [INFO] Running at [38;5;121m35.33[0m[38;5;159m FPS.[0m
+Episode 10 [step_straight]: 報酬= 361.28, ステップ=  75, 最小距離=0.795m, 成功
+
+======================================================================
+評価結果詳細
+======================================================================
+【全体】
+  成功率:         80.0% (8/10)
+  平均報酬:       592.69 ± 513.95
+  平均ステップ数: 178.0
+  平均最小距離:   0.820m
+
+【flat_easy】 (n=6)
+  成功率:         100.0% (6/6)
+  平均報酬:       320.88
+  平均ステップ数: 103.5
+  平均最小距離:   0.798m
+
+【step_straight】 (n=2)
+  成功率:         100.0% (2/2)
+  平均報酬:       383.16
+  平均ステップ数: 79.5
+  平均最小距離:   0.798m
+
+【step_tier3_to_tier2】 (n=2)
+  成功率:         0.0% (0/2)
+  平均報酬:       1617.65
+  平均ステップ数: 500.0
+  平均最小距離:   0.910m
+======================================================================
+
+============================================================
+総合評価基準
+============================================================
+総合評価: 優秀
+コメント: 実用レベルに達しています
+============================================================
+[38;5;159m[Genesis] [14:09:14] [INFO] 💤 Exiting Genesis and caching compiled kernels...[0m

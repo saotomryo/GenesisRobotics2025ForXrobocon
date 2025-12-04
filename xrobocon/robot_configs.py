@@ -147,6 +147,91 @@ ROBOT_CONFIGS = {
             'alignment_reward_weight': 2.0, # ターゲット方向への整列報酬
         }
     },
+    # xrobocon/robot_configs.py の ROBOT_CONFIGS 辞書内に追加
+
+    'rocker_bogie': {
+        'name': 'ロッカー・ボギー型',
+        'xml_file': 'robot_rocker_bogie.xml',
+        'description': '火星探査機スタイルの6輪サスペンションロボット',
+        
+        # 物理パラメータ
+        'physics': {
+            'base_size': (0.30, 0.20, 0.08),
+            'wheel_radius': 0.06,  # 直径12cm
+            'mass': 7.0,
+        },
+        
+        # 登坂能力
+        'capabilities': {
+            'max_step_height': 0.15,   # 車輪直径の1.5倍近くまで登れる可能性あり
+            'max_slope': 35,
+            'target_tier': 'Tier 2',
+        },
+        
+        # 制御パラメータ
+        'control': {
+            'action_space_dim': 2,     # [left_drive, right_drive] (6輪を左右でグループ化)
+            'max_torque': 40.0,
+            'max_speed': 1.0,
+        },
+        
+        # 開始位置
+        'start_positions': {
+            'flat': {
+                'z_offset': 0.15,
+            },
+            'step': {
+                'z_offset': 0.15,
+            }
+        },
+        
+        # 報酬パラメータ
+        'reward_params': {
+            'use_specialized_rewards': False,  # 特殊な姿勢制御なしでも物理的に登れる
+        }
+    },
+    
+    'rocker_bogie_large': {
+        'name': 'ロッカー・ボギー型（大型）',
+        'xml_file': 'robot_rocker_bogie_large.xml',
+        'description': '火星探査機スタイルの6輪サスペンションロボット（大型版・段差登坂用）',
+        
+        # 物理パラメータ
+        'physics': {
+            'base_size': (0.45, 0.30, 0.12),  # 1.5倍
+            'wheel_radius': 0.09,  # 直径18cm（1.5倍）
+            'mass': 15.8,  # 約2.25倍（体積比）
+        },
+        
+        # 登坂能力
+        'capabilities': {
+            'max_step_height': 0.25,   # 車輪直径の1.4倍程度まで登れる
+            'max_slope': 35,
+            'target_tier': 'Tier 2',
+        },
+        
+        # 制御パラメータ
+        'control': {
+            'action_space_dim': 2,     # [left_drive, right_drive] (6輪を左右でグループ化)
+            'max_torque': 90.0,        # 大型化に伴いトルク増加
+            'max_speed': 0.8,          # 大型化で少し遅く
+        },
+        
+        # 開始位置
+        'start_positions': {
+            'flat': {
+                'z_offset': 0.225,  # 1.5倍
+            },
+            'step': {
+                'z_offset': 0.225,
+            }
+        },
+        
+        # 報酬パラメータ
+        'reward_params': {
+            'use_specialized_rewards': False,  # 特殊な姿勢制御なしでも物理的に登れる
+        }
+    },
 }
 
 def get_robot_config(robot_type):
