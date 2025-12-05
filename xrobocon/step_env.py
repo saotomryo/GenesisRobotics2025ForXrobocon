@@ -43,16 +43,18 @@ class XRoboconStepEnv(XRoboconBaseEnv):
         {
             'name': 'Scenario 1: 正面段差登坂 (Ground -> Tier 3)',
             'type': 'step_straight',
-            'start_pos': (5.5, 0.0, self.start_z_offset), # Tier 3 (R=4.65) の外側
+            'start_pos': (5.5, 0.0, self.start_z_offset), # Tier 3の外側
             'start_euler': (0, 0, 180),                    # 中心方向
-            'target_pos': (4.0, 0.0, 0.1 + self.start_z_offset), # Tier 3の上
+            # Tier 3の中央: (Tier 2半径3.25 + Tier 3半径4.65) / 2 = 3.95m
+            'target_pos': (3.95, 0.0, 0.1 + self.start_z_offset), # Tier 3の中央
         },
         {
             'name': 'Scenario 2: 2段目登坂 (Tier 3 -> Tier 2)',
             'type': 'step_tier3_to_tier2',
-            'start_pos': (4.0, 0.0, 0.1 + self.start_z_offset),  # Tier 3の上 (Z=0.1)
+            'start_pos': (3.95, 0.0, 0.1 + self.start_z_offset),  # Tier 3の中央
             'start_euler': (0, 0, 180),     # 中心方向
-            'target_pos': (2.5, 0.0, 0.35 + self.start_z_offset),  # Tier 2の上 (Z=0.35)
+            # Tier 2の中央: (Tier 1半径1.85 + Tier 2半径3.25) / 2 = 2.55m
+            'target_pos': (2.55, 0.0, 0.35 + self.start_z_offset),  # Tier 2の中央
         },
     ]
         
@@ -388,11 +390,35 @@ class XRoboconStepEnv(XRoboconBaseEnv):
                     align_score = (1.0 - abs(angle_diff) / np.pi)
                     reward += align_score * config['reward_params'].get('alignment_reward_weight', 0.0)
             
+            # ターゲット付近でのボーナス報酬（距離に応じて増加）
+            if dist < 1.0:
+                # 1m以内に入ったら、距離に応じてボーナス
+                proximity_bonus = (1.0 - dist) * 50.0  # 最大50.0
+                reward += proximity_bonus
+                
+                # ターゲット付近での減速報酬
+                # 距離が近いほど、低速であることに高い報酬
+                speed = np.linalg.norm(vel)
+                if dist < 0.7:
+                    # 目標速度: 距離に応じて0.1～0.3m/s
+                    target_speed = 0.1 + dist * 0.3  # 距離0.1m→0.13m/s, 距離0.7m→0.31m/s
+                    
+                    if speed < target_speed:
+                        # 目標速度以下なら報酬
+                        slowdown_bonus = (target_speed - speed) * 30.0
+                        reward += slowdown_bonus
+                    else:
+                        # 目標速度より速いとペナルティ
+                        slowdown_penalty = (speed - target_speed) * 20.0
+                        reward -= slowdown_penalty
+            
             # ターゲット到達判定
             # ターゲットから0.5m以内 かつ 高さがターゲット付近 (ターゲット高さ - 10cm以上)
             if dist < 0.5 and robot_pos[2] > target_pos[2] - 0.1:
-                # 到達ボーナス
-                reward += 500.0
+                # 成功時、速度が低いほど高報酬
+                speed = np.linalg.norm(vel)
+                speed_bonus = max(0, (0.3 - speed) * 100.0)  # 速度0.3m/s以下でボーナス
+                reward += 500.0 + speed_bonus  # 成功報酬 + 速度ボーナス
                 terminated = True
             
         # 3. 安定性報酬 (転倒防止)

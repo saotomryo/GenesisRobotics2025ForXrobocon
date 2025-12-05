@@ -88,6 +88,9 @@ def evaluate_model(model_path, num_episodes=10, render=False, robot_type='standa
         if scenario_type not in stats['scenarios']:
             stats['scenarios'][scenario_type] = {'success': 0, 'reward': [], 'steps': [], 'dist': [], 'count': 0}
         
+        episode_success = False  # エピソードの成功フラグ
+        final_robot_pos = None
+        
         while not done and steps < 500:  # 最大500ステップ
             action, _ = model.predict(obs, deterministic=True)
             obs, reward, terminated, truncated, _ = env.step(action)
@@ -100,26 +103,35 @@ def evaluate_model(model_path, num_episodes=10, render=False, robot_type='standa
             target_pos = np.array(env.current_target['pos'])
             dist = np.linalg.norm(robot_pos[:2] - target_pos[:2])
             min_dist = min(min_dist, dist)
+            final_robot_pos = robot_pos  # 最終位置を保存
             
-            # ターゲット到達判定
-            success = False
+            # ターゲット到達判定（早期終了用）
             if env_type in ['step', 'step_hard']:
-                # 段差環境: 距離0.5m以内 かつ 高さ条件を厳格化
-                # ターゲット高さの-5cm以内（ほぼ同じ高さ）にいる必要がある
                 height_diff = robot_pos[2] - target_pos[2]
                 if dist < 0.5 and height_diff > -0.05:
-                    success = True
+                    episode_success = True
+                    break
             else:
-                # 平地環境: 距離0.5m以内
                 if dist < 0.5:
-                    success = True
-            
-            if success:
-                stats['total']['success'] += 1
-                stats['scenarios'][scenario_type]['success'] += 1
-                break
+                    episode_success = True
+                    break
+        
+        # エピソード終了後の最終成功判定（min_distベース）
+        if not episode_success and final_robot_pos is not None:
+            # 早期終了しなかった場合、min_distで最終判定
+            if env_type in ['step', 'step_hard']:
+                height_diff = final_robot_pos[2] - target_pos[2]
+                if min_dist < 0.5 and height_diff > -0.05:
+                    episode_success = True
+            else:
+                if min_dist < 0.5:
+                    episode_success = True
         
         # 統計更新
+        if episode_success:
+            stats['total']['success'] += 1
+            stats['scenarios'][scenario_type]['success'] += 1
+        
         stats['total']['reward'].append(total_reward)
         stats['total']['steps'].append(steps)
         stats['total']['dist'].append(min_dist)
@@ -129,7 +141,7 @@ def evaluate_model(model_path, num_episodes=10, render=False, robot_type='standa
         stats['scenarios'][scenario_type]['dist'].append(min_dist)
         stats['scenarios'][scenario_type]['count'] += 1
         
-        print(f"Episode {episode+1:2d} [{scenario_type}]: 報酬={total_reward:7.2f}, ステップ={steps:4d}, 最小距離={min_dist:.3f}m, {'成功' if min_dist < 0.8 else '失敗'}")
+        print(f"Episode {episode+1:2d} [{scenario_type}]: 報酬={total_reward:7.2f}, ステップ={steps:4d}, 最小距離={min_dist:.3f}m, {'成功' if episode_success else '失敗'}")
     
     # 結果集計と表示
     print("\n" + "="*70)
