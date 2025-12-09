@@ -213,8 +213,8 @@ ROBOT_CONFIGS = {
         # 制御パラメータ
         'control': {
             'action_space_dim': 2,     # [left_drive, right_drive] (6輪を左右でグループ化)
-            'max_torque': 90.0,        # 大型化に伴いトルク増加
-            'max_speed': 0.8,          # 大型化で少し遅く
+            'max_torque': 120.0,        # 大型化に伴いトルク増加
+            'max_speed': 0.9,          # 大型化で少し遅く
         },
         
         # 開始位置

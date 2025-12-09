@@ -71,10 +71,10 @@
   <actuator>
     <motor name="fl_motor" joint="left_wheel_front_joint" gear="90"/>
     <motor name="ml_motor" joint="left_wheel_middle_joint" gear="90"/>
-    <motor name="rl_motor" joint="left_wheel_rear_joint" gear="90"/>
+    <motor name="rl_motor" joint="left_wheel_rear_joint" gear="150"/>  <!-- 後輪強化 -->
     
     <motor name="fr_motor" joint="right_wheel_front_joint" gear="90"/>
     <motor name="mr_motor" joint="right_wheel_middle_joint" gear="90"/>
-    <motor name="rr_motor" joint="right_wheel_rear_joint" gear="90"/>
+    <motor name="rr_motor" joint="right_wheel_rear_joint" gear="150"/>  <!-- 後輪強化 -->
   </actuator>
 </mujoco>

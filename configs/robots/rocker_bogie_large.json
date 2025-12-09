@@ -8,7 +8,10 @@
     "models/rocker_bogie_large_newl.zip",
     "models/rocker_boogie_large_new2.zip",
     "models/rocker_bogie_large_new2.zip",
-    "models/rocker_bogie_large_new2.zip"
+    "models/rocker_bogie_large_new2.zip",
+    "models/rocker_bogie_large_new3.zip",
+    "models/rocker_bogie_large_new4.zip",
+    "models/rocker_bogie_large_new5.zip"
   ],
   "physics": {
     "base_size": "[0.45, 0.3, 0.12]",
